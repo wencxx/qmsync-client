@@ -73,6 +73,7 @@ function ManageControlledForms() {
 
   // get forms
   const [forms, setForms] = useState<ControlForm2[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
   const getForms = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/get`)
@@ -84,6 +85,8 @@ function ManageControlledForms() {
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -100,7 +103,7 @@ function ManageControlledForms() {
           Add Form
         </Button>
       </div>
-      <DataTable columns={columns} data={forms} />
+      <DataTable columns={columns} data={forms} isLoading={loading} />
 
       {/* dialog for adding new form */}
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>

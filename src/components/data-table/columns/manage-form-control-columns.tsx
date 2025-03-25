@@ -10,10 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ArrowUpDown, MoreHorizontal, FileText, Trash, Eye } from "lucide-react"
-import type { ControlForm } from "@/types/control-form"
+import type { ControlForm2 } from "@/types/control-form"
 import { formatDate } from "@/lib/utils"
 
-export const columns: ColumnDef<ControlForm>[] = [
+export const columns: ColumnDef<ControlForm2>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -83,9 +83,9 @@ export const columns: ColumnDef<ControlForm>[] = [
               <Eye className="mr-2 h-4 w-4" />
               View details
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => window.open(form.fileUrl, "_blank")}>
               <FileText className="mr-2 h-4 w-4" />
-              Export as PDF
+              Download form
             </DropdownMenuItem>
             <DropdownMenuItem className="text-destructive">
               <Trash className="mr-2 h-4 w-4" />

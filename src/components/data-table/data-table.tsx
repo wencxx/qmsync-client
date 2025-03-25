@@ -23,22 +23,23 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown } from "lucide-react"
 import { DataTablePagination } from "./data-table-pagination"
-import type { Form } from "@/types/control-form"
+import { Skeleton } from "../ui/skeleton"
 
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
-  data: Form[]
+  data: any[]
+  isLoading?: boolean
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, isLoading }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState<string>("")
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
-  const table = useReactTable<Form>({
+  const table = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
@@ -108,20 +109,32 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+            {isLoading ? (
+              Array.from({ length: 5 }, (_, i) => (
+                <TableRow key={i}>
+                  {Array.from({ length: columns.length }, (_, i) => (
+                    <TableCell key={i}>
+                      <Skeleton className="h-[20px] w-full" />
+                    </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No forms found.
-                </TableCell>
-              </TableRow>
+              table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    No forms found.
+                  </TableCell>
+                </TableRow>
+              )
             )}
           </TableBody>
         </Table>
