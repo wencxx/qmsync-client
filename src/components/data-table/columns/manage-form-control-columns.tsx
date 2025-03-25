@@ -1,5 +1,4 @@
 import type { ColumnDef } from "@tanstack/react-table"
-import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import {
@@ -62,31 +61,6 @@ export const columns: ColumnDef<ControlForm>[] = [
       )
     },
     cell: ({ row }) => <div>{formatDate(row.getValue("dueDate"))}</div>,
-  },
-  {
-    accessorKey: "completedDate",
-    header: ({ column }) => {
-      return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Completed Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div>{formatDate(row.getValue("completedDate"))}</div>,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => {
-      const status = row.getValue("status") as string
-
-      return (
-        <Badge variant="success">
-          {status}
-        </Badge>
-      )
-    },
   },
   {
     id: "actions",

@@ -9,3 +9,13 @@ export interface ControlForm {
   version: string
 }
 
+export interface ControlForm2 {
+  _id: string
+  formId: string
+  formName: string
+  dueDate: string
+  placeholders: string[],
+  fileUrl: string,
+  __v: number
+}
+

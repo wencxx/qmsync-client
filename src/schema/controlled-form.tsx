@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const addingControlFormSchema = z.object({
-  formId: z.string(),
-  formName: z.string(),
-  dueDate: z.string(),
+  formId: z.string().nonempty({ message: "Form ID is required" }),
+  formName: z.string().nonempty({ message: "Form name is required" }),
+  dueDate: z.string().nonempty({ message: "Due date is required" }),
   file: z.instanceof(File, { message: "A valid file is required" })
 });
