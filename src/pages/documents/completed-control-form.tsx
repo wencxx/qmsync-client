@@ -125,7 +125,7 @@ const mockForms: ControlForm[] = [
   },
 ]
 
-function CompletedControlForms() {
+function CompletedControlledForms() {
   return (
     <>
       <h1 className="font-bold text-2xl">Completed Controlled Forms</h1>
@@ -134,4 +134,4 @@ function CompletedControlForms() {
   );
 }
 
-export default CompletedControlForms;
+export default CompletedControlledForms;

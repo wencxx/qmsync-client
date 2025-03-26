@@ -34,6 +34,18 @@ export const columns: ColumnDef<ControlForm2>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "formId",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Form ID
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div>{row.getValue("formId")}</div>,
+  },
+  {
     accessorKey: "formName",
     header: ({ column }) => {
       return (
@@ -44,11 +56,6 @@ export const columns: ColumnDef<ControlForm2>[] = [
       )
     },
     cell: ({ row }) => <div className="font-medium">{row.getValue("formName")}</div>,
-  },
-  {
-    accessorKey: "formId",
-    header: "Form ID",
-    cell: ({ row }) => <div>{row.getValue("formId")}</div>,
   },
   {
     accessorKey: "dueDate",

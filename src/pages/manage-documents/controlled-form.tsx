@@ -59,6 +59,7 @@ function ManageControlledForms() {
       })
 
       if(res.data === 'success'){
+        getForms()
         setOpenDialog(false)
         toast('Added form successfully.')
       }else{
@@ -67,7 +68,7 @@ function ManageControlledForms() {
     } catch (error) {
       console.log(error)
     } finally {
-      setIsLoading(false)
+      setIsLoading(false) 
     }
   }
 

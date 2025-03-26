@@ -5,29 +5,65 @@ import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
 import HomePage from "./pages/home";
 // documents
-import CompletedControlForms from "./pages/documents/completed-control-form";
+import PendingControlledForms from "./pages/documents/pending-control-form";
+import CompletedControlledForms from "./pages/documents/completed-control-form";
 // courses
 import DepartmentOfArchitecture from "./pages/courses/DOA";
 // manage docs
 import ManageControlledForms from '@/pages/manage-documents/controlled-form'
+
+const publicRoutes = [
+  {
+    path: '/login',
+    element: <LoginPage />
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />
+  }
+]
+
+const protectedRoutes = [
+  {
+    path: '/',
+    element: <HomePage />
+  },
+  {
+    path: '/pending-controlled-forms',
+    element: <PendingControlledForms />
+  },
+  {
+    path: '/completed-controlled-forms',
+    element: <CompletedControlledForms />
+  },
+  {
+    path: '/manage-controlled-forms',
+    element: <ManageControlledForms />
+  },
+  {
+    path: '/deparment-of-architectures',
+    element: <DepartmentOfArchitecture />
+  },
+]
+
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        {publicRoutes.map((route) => (
+          <Route path={route.path} element={route.element} />
+        ))}
         {/* <Route path="/unauthorized" element={<Unauthorized />} /> */}
+
 
         {/* Protected Routes */}
         {/* <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}> */}
           <Route element={<Layout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/completed-control-forms" element={<CompletedControlForms />} />
-            <Route path="/manage-controlled-forms" element={<ManageControlledForms />} />
-            <Route path="/deparment-of-architectures" element={<DepartmentOfArchitecture />} />
-            {/* <Route path="/profile" element={<Profile />} /> */}
+            {protectedRoutes.map((route) => (
+              <Route path={route.path} element={route.element} />
+            ))}
           </Route>
         {/* </Route> */}
       </Routes>

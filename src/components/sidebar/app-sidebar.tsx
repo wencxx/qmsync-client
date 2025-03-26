@@ -47,11 +47,11 @@ const data = {
       items: [
         {
           title: "Pending",
-          url: "#",
+          url: "/pending-controlled-forms",
         },
         {
           title: "Completed",
-          url: "/completed-control-forms",
+          url: "/completed-controlled-forms",
         }
       ],
     },
