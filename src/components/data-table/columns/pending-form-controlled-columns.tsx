@@ -3,14 +3,12 @@ import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { ArrowUpDown, MoreHorizontal, FileText, SquarePen } from "lucide-react"
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { ArrowUpDown, Pencil } from "lucide-react"
 import type { ControlForm2 } from "@/types/control-form"
 import { formatDate } from "@/lib/utils"
 import {
@@ -23,29 +21,17 @@ import {
 import { useState } from "react"
 import ControlledForm from '@/forms/controlled-forms'
 
-export const columns: ColumnDef<ControlForm2>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+export const columns = (getPendingForms: () => void): ColumnDef<ControlForm2>[] => [
   {
     accessorKey: "formId",
-    header: "Form ID",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Form ID
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({ row }) => <div>{row.getValue("formId")}</div>,
   },
   {
@@ -75,10 +61,17 @@ export const columns: ColumnDef<ControlForm2>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: () => {
+    cell: ({ row }) => {
+      const { dueDate } = row.original
+
+      const currentDate = new Date()
+      const due = new Date(dueDate)
+
+      const isLate = currentDate > due
+
       return (
-        <Badge variant="pending">
-          Pending
+        <Badge variant={isLate ? 'late' : 'pending'} className="w-full xl:w-1/3">
+          {isLate ? 'Late' : 'Pending'}
         </Badge>
       )
     },
@@ -90,30 +83,20 @@ export const columns: ColumnDef<ControlForm2>[] = [
 
       const [openDialog, setOpenDialog] = useState<boolean>(false)
       const [formToFill, setFormToFill] = useState<string[]>([])
+      const [formId, setFormId] = useState<string>('')
 
       return (
         <>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(form.formId)}>Copy Form ID</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => {setOpenDialog(true), setFormToFill(form.placeholders)}}>
-                <SquarePen className="mr-2 h-4 w-4" />
-                Fill out
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <FileText className="mr-2 h-4 w-4" />
-                Export as Docx
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Pencil size={17} onClick={() => { setOpenDialog(true), setFormToFill(form.placeholders), setFormId(form._id) }} />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Fill out form</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
 
           {/* form dialog */}
@@ -123,7 +106,7 @@ export const columns: ColumnDef<ControlForm2>[] = [
                 <DialogTitle>Fill out form</DialogTitle>
                 <DialogDescription></DialogDescription>
               </DialogHeader>
-              <ControlledForm formFields={formToFill}  />
+              <ControlledForm formFields={formToFill} formId={formId} getPendingForms={getPendingForms} />
             </DialogContent>
           </Dialog>
         </>

@@ -11,10 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ArrowUpDown, MoreHorizontal, FileText, Trash, Eye } from "lucide-react"
-import type { ControlForm } from "@/types/control-form"
+import type { ControlForm3 } from "@/types/control-form"
 import { formatDate } from "@/lib/utils"
+import axios from "axios"
 
-export const columns: ColumnDef<ControlForm>[] = [
+export const columns: ColumnDef<ControlForm3>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -78,12 +79,11 @@ export const columns: ColumnDef<ControlForm>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => {
-      const status = row.getValue("status") as string
+    cell: () => {
 
       return (
         <Badge variant="success">
-          {status}
+          Completed
         </Badge>
       )
     },
@@ -92,6 +92,28 @@ export const columns: ColumnDef<ControlForm>[] = [
     id: "actions",
     cell: ({ row }) => {
       const form = row.original
+
+      const generateDocx = async () => {
+        try {
+          const response = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/generateDocs/${form.submittedFormId}`, {
+            responseType: "blob", // Important: ensures the response is treated as a file
+          });
+
+          // Create a URL for the downloaded file
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          // Create an <a> element and trigger a download
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "generated-document.docx"); // Set the file name
+          document.body.appendChild(link);
+          link.click();
+
+          // Cleanup
+          window.URL.revokeObjectURL(url);
+        } catch (error) {
+          console.log(error)
+        }
+      }
 
       return (
         <DropdownMenu>
@@ -106,16 +128,12 @@ export const columns: ColumnDef<ControlForm>[] = [
             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(form.formId)}>Copy form ID</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Eye className="mr-2 h-4 w-4" />
-              View details
-            </DropdownMenuItem>
-            <DropdownMenuItem>
               <FileText className="mr-2 h-4 w-4" />
               Export as PDF
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
-              <Trash className="mr-2 h-4 w-4" />
-              Delete form
+            <DropdownMenuItem onClick={() => generateDocx()}>
+              <FileText className="mr-2 h-4 w-4" />
+              Export as Docx
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

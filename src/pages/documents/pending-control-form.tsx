@@ -10,14 +10,12 @@ function PendingControlledForms() {
   const [loading, setLoading] = useState<boolean>(true)
 
   const getPendingForms = async () => {
-    const id = '123123'
+    const id = 'asdasd'
     try {
       const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/pending/${id}`)
 
       if(res.data !== 'No forms found'){
         setPendingForms(res.data)
-      }else{
-        toast("Failed to fetch pending forms")
       }
     } catch (error) {
       console.log(error)
@@ -35,7 +33,7 @@ function PendingControlledForms() {
   return (
     <>
       <h1 className="font-bold text-2xl">Pending Controlled Forms</h1>
-      <DataTable columns={columns} data={pendingForms} isLoading={loading} />
+      <DataTable columns={columns(getPendingForms)} data={pendingForms} isLoading={loading} />
     </>
   );
 }

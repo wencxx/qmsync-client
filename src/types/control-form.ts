@@ -19,3 +19,15 @@ export interface ControlForm2 {
   __v: number
 }
 
+export interface ControlForm3 {
+  _id: number
+  formId: string
+  formName: string
+  dueDate: string
+  completedDate: Date
+  submittedFormId: string
+  placeholders: string[]
+  createdAt: Date
+  _v: string
+}
+

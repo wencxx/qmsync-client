@@ -52,8 +52,8 @@ function App() {
     <Router>
       <Routes>
         {/* Public Routes */}
-        {publicRoutes.map((route) => (
-          <Route path={route.path} element={route.element} />
+        {publicRoutes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
         ))}
         {/* <Route path="/unauthorized" element={<Unauthorized />} /> */}
 
@@ -61,8 +61,8 @@ function App() {
         {/* Protected Routes */}
         {/* <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}> */}
           <Route element={<Layout />}>
-            {protectedRoutes.map((route) => (
-              <Route path={route.path} element={route.element} />
+            {protectedRoutes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
             ))}
           </Route>
         {/* </Route> */}
