@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import ProtectedRoute from "./routes/protected-routes";
+import ProtectedRoute from "./routes/protected-routes";
 import Layout from "./layout/layout";
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
@@ -23,7 +23,7 @@ const publicRoutes = [
   }
 ]
 
-const protectedRoutes = [
+const privateRoutes = [
   {
     path: '/',
     element: <HomePage />
@@ -59,13 +59,13 @@ function App() {
 
 
         {/* Protected Routes */}
-        {/* <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}> */}
+        <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
           <Route element={<Layout />}>
-            {protectedRoutes.map((route, index) => (
+            {privateRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
             ))}
           </Route>
-        {/* </Route> */}
+        </Route>
       </Routes>
     </Router>
   );

@@ -10,31 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ArrowUpDown, MoreHorizontal, FileText, Trash, Eye } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, FileText } from "lucide-react"
 import type { ControlForm3 } from "@/types/control-form"
 import { formatDate } from "@/lib/utils"
 import axios from "axios"
+import { toast } from "sonner"
 
 export const columns: ColumnDef<ControlForm3>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "formName",
     header: ({ column }) => {
@@ -45,7 +27,7 @@ export const columns: ColumnDef<ControlForm3>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="font-medium">{row.getValue("formName")}</div>,
+    cell: ({ row }) => <div className="font-mediu pl-3">{row.getValue("formName")}</div>,
   },
   {
     accessorKey: "formId",
@@ -96,19 +78,21 @@ export const columns: ColumnDef<ControlForm3>[] = [
       const generateDocx = async () => {
         try {
           const response = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/generateDocs/${form.submittedFormId}`, {
-            responseType: "blob", // Important: ensures the response is treated as a file
+            responseType: "blob",
           });
 
-          // Create a URL for the downloaded file
+          if(response.data === 'Form not found'){
+            toast('Failed generating form.')
+            return
+          }
+
           const url = window.URL.createObjectURL(new Blob([response.data]));
-          // Create an <a> element and trigger a download
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "generated-document.docx"); // Set the file name
+          link.setAttribute("download", `${form.formName}.docx`);
           document.body.appendChild(link);
           link.click();
 
-          // Cleanup
           window.URL.revokeObjectURL(url);
         } catch (error) {
           console.log(error)

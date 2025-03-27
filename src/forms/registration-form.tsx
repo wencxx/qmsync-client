@@ -27,20 +27,71 @@ import { registerSchema } from '@/schema/registration-schema'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { Link, useNavigate } from 'react-router-dom'
+import axios from "axios"
+import { toast } from "sonner"
+import { useState } from "react"
 
 export function RegisterForm({
     className,
     ...props
 }: React.ComponentProps<"div">) {
 
+    const navigate = useNavigate()
+
     const form = useForm<z.infer<typeof registerSchema>>({
         resolver: zodResolver(registerSchema),
+        defaultValues: {
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            suffix: "",
+            idNumber: "",
+            number: "",
+            email: "",
+            username: "",
+            position: "",
+            role: "",
+            department: "",
+            password: "",
+            confirmPass: "",
+        }
     })
 
-    function onSubmit(values: z.infer<typeof registerSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    const [loading, setLoading] = useState<boolean>(false)
+
+    const register = async (values: z.infer<typeof registerSchema>) => {
+        const { confirmPass, ...data } = values
+
+        try {
+            setLoading(true)
+            const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}auth/register`, data)
+
+            console.log(res.data)
+            if (res.data === 'success') {
+                toast.success('Registered successfully.', {
+                    position: 'top-center'
+                })
+                navigate('/login')
+            } else if(res.data === 'Username must be unique'){
+                toast.warning('Username is already in use.', {
+                    description: 'Choose a different username',
+                    position: 'top-center',
+                    descriptionClassName: '!text-neutral-500'
+                })
+            } else {
+                toast.error('Failed to register.', {
+                    position: 'top-center'
+                })
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error('Failed to register.', {
+                position: 'top-center'
+            })
+        } finally {
+            setLoading(false)
+        }
     }
 
 
@@ -55,7 +106,7 @@ export function RegisterForm({
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="grid md:grid-cols-2 lg:grid-cols-3 gap-2 gap-y-5">
+                        <form onSubmit={form.handleSubmit(register)} className="grid md:grid-cols-2 lg:grid-cols-3 gap-2 gap-y-5">
                             <FormField
                                 control={form.control}
                                 name="firstName"
@@ -110,12 +161,12 @@ export function RegisterForm({
                             />
                             <FormField
                                 control={form.control}
-                                name="suffix"
+                                name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Employee/Faculty ID Number</FormLabel>
+                                        <FormLabel>Email<span className="text-main">*</span></FormLabel>
                                         <FormControl>
-                                            <Input {...field} />
+                                            <Input placeholder="email@slu.edu.ph" type="email" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -134,19 +185,46 @@ export function RegisterForm({
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem className="col-span-full">
-                                        <FormLabel>Email<span className="text-main">*</span></FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="email@slu.edu.ph" type="email" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <div className="col-span-full grid md:grid-cols-2 gap-2">
+                                <FormField
+                                    control={form.control}
+                                    name="idNumber"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Employee/Faculty ID Number<span className="text-main">*</span></FormLabel>
+                                            <FormControl>
+                                                <Input {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="department"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Department<span className="text-main">*</span>
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Select onValueChange={field.onChange} value={field.value}>
+                                                    <SelectTrigger className="w-full overflow-hidden">
+                                                        <SelectValue placeholder="Select Department" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="Department of Architecture">Department of Architecture</SelectItem>
+                                                        <SelectItem value="Department of Industrial Engineering">Department of Industrial Engineering</SelectItem>
+                                                        <SelectItem value="Department of Chemical and Mining Engineering">Department of Chemical and Mining Engineering</SelectItem>
+                                                        <SelectItem value="Department of Civil and Geodetic Engineering">Department of Civil and Geodetic Engineering</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                             <FormField
                                 control={form.control}
                                 name="username"
@@ -188,9 +266,9 @@ export function RegisterForm({
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value="Faculty">Faculty</SelectItem>
-                                                    <SelectItem value="Department Head">Department Head</SelectItem>
-                                                    <SelectItem value="Document Controller">Document Controller</SelectItem>
-                                                    <SelectItem value="Process Owner">Process Owner</SelectItem>
+                                                    <SelectItem value="Head">Department Head</SelectItem>
+                                                    <SelectItem value="Controller">Document Controller</SelectItem>
+                                                    <SelectItem value="Owner">Process Owner</SelectItem>
                                                     <SelectItem value="Admin">Admin</SelectItem>
                                                 </SelectContent>
                                             </Select>
@@ -199,66 +277,42 @@ export function RegisterForm({
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="department"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Department<span className="text-main">*</span>
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Select onValueChange={field.onChange} value={field.value}>
-                                                <SelectTrigger className="w-full">
-                                                    <SelectValue placeholder="Select Department" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="Department of Architecture">Department of Architecture</SelectItem>
-                                                    <SelectItem value="Department of Industrial Engineering">Department of Industrial Engineering</SelectItem>
-                                                    <SelectItem value="Department of Chemical and Mining Engineering">Department of Chemical and Mining Engineering</SelectItem>
-                                                    <SelectItem value="Department of Civil and Geodetic Engineering">Department of Civil and Geodetic Engineering</SelectItem>
-                                                    <SelectItem value="Admin">Admin</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Password<span className="text-main">*</span></FormLabel>
-                                        <FormControl>
-                                            <Input type="password" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="confirmPass"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Confirm Password<span className="text-main">*</span></FormLabel>
-                                        <FormControl>
-                                            <Input type="password" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <Button type="submit" className="col-span-full bg-main">Submit</Button>
+                            <div className="col-span-full grid md:grid-cols-2 gap-2">
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Password<span className="text-main">*</span></FormLabel>
+                                            <FormControl>
+                                                <Input type="password" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="confirmPass"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Confirm Password<span className="text-main">*</span></FormLabel>
+                                            <FormControl>
+                                                <Input type="password" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <Button type="submit" className={`col-span-full bg-main ${loading && 'animate-pulse'}`} disabled={loading}>
+                                {loading ? 'Registering' : 'Register'}
+                            </Button>
                             <div className="mt-4 text-center text-sm col-span-full">
                                 Already have an account?{" "}
-                                <a href="#" className="underline underline-offset-4">
+                                <Link to="/login" className="underline underline-offset-4">
                                     Sign in
-                                </a>
+                                </Link>
                             </div>
                         </form>
                     </Form>

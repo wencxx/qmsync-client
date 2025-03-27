@@ -37,13 +37,13 @@ function ControlledForm({ formFields, formId, getPendingForms }: { formFields: s
             
             if(res.data === 'success'){
                 getPendingForms()
-                toast('Submitted controlled form successfully.')
+                toast.success('Submitted controlled form successfully.')
             }else{
-                toast('Failed to submit controlled form.')
+                toast.error('Failed to submit controlled form.')
             }
         } catch (error) {
             console.log(error)
-            toast('Failed to submit controlled form.')
+            toast.error('Failed to submit controlled form.')
         } finally {
             setIsLoading(false)
         }

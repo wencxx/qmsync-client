@@ -5,19 +5,13 @@ export const registerSchema = z.object({
         .min(2, { message: "First name must be at least 2 characters" })
         .max(50, { message: "First name must not exceed 50 characters" }),
 
-    middleName: z.string()
-        .min(2, { message: "Middle name must be at least 2 characters" })
-        .max(50, { message: "Middle name must not exceed 50 characters" })
-        .optional(),
+    middleName: z.string().optional(),
 
     lastName: z.string()
         .min(2, { message: "Last name must be at least 2 characters" })
         .max(50, { message: "Last name must not exceed 50 characters" }),
 
-    suffix: z.string()
-        .min(2, { message: "Suffix must be at least 2 characters" })
-        .max(3, { message: "Suffix must not exceed 3 characters" })
-        .optional(),
+    suffix: z.string().optional(),
 
     idNumber: z.string()
         .min(5, { message: "ID number must be at least 5 characters" })
@@ -37,11 +31,11 @@ export const registerSchema = z.object({
         .max(15, { message: "Username must not exceed 15 characters" }),
 
     position: z.string()
-        .min(10, { message: "Position must be at least 10 characters" })
+        .min(3, { message: "Position must be at least 3 characters" })
         .max(50, { message: "Position must not exceed 50 characters" }),
 
     role: z.string()
-        .min(10, { message: "Role must be at least 10 characters" })
+        .min(4, { message: "Role must be at least 10 characters" })
         .max(50, { message: "Role must not exceed 50 characters" }),
 
     department: z.string()
@@ -49,7 +43,7 @@ export const registerSchema = z.object({
         .max(50, { message: "Department must not exceed 50 characters" }),
 
     password: z.string()
-        .min(15, { message: "Password must be at least 15 characters long" })
+        .min(8, { message: "Password must be at least 8 characters long" })
         .max(50, { message: "Password must not exceed 50 characters" })
         .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter (A-Z)" })
         .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter (a-z)" })

@@ -19,7 +19,7 @@ function PendingControlledForms() {
       }
     } catch (error) {
       console.log(error)
-      toast("Failed to fetch pending forms")
+      toast.error("Failed to fetch pending forms")
     } finally {
       setLoading(false)
     }

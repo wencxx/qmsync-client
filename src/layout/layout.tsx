@@ -14,7 +14,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Toaster } from "@/components/ui/sonner"
 
 function Layout() {
     return (
@@ -44,7 +43,6 @@ function Layout() {
                     <main className="px-5 lg:px-10 py-5 space-y-10">
                         <Outlet />
                     </main>
-                    <Toaster />
                 </SidebarInset>
             </SidebarProvider>
         </>

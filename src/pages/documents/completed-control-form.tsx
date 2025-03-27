@@ -16,11 +16,11 @@ function CompletedControlledForms() {
 
       if(res.data !== 'No forms found'){
         setForms(res.data)
-        // console.log(res.data)
+        console.log(res.data)
       }
     } catch (error) {
       console.log(error)
-      toast("Failed to fetch completed forms")
+      toast.error("Failed to fetch completed forms")
     } finally {
       setLoading(false)
     }

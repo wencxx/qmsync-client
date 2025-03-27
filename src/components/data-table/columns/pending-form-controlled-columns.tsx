@@ -32,7 +32,7 @@ export const columns = (getPendingForms: () => void): ColumnDef<ControlForm2>[] 
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("formId")}</div>,
+    cell: ({ row }) => <div className="pl-3">{row.getValue("formId")}</div>,
   },
   {
     accessorKey: "formName",
