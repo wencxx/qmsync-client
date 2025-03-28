@@ -1,8 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useAuthStore } from "@/store/autStore";
 import ProtectedRoute from "./routes/protected-routes";
 import Layout from "./layout/layout";
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
+import Unauthorized from "./pages/Unauthorized";
 import HomePage from "./pages/home";
 // documents
 import PendingControlledForms from "./pages/documents/pending-control-form";
@@ -15,11 +17,19 @@ import ManageControlledForms from '@/pages/manage-documents/controlled-form'
 const publicRoutes = [
   {
     path: '/login',
-    element: <LoginPage />
+    element: (
+      useAuthStore.getState().isAuthenticated() 
+        ? <Navigate to={'/'} replace />
+        : <LoginPage />
+    )
   },
   {
     path: '/register',
-    element: <RegisterPage />
+    element: (
+      useAuthStore.getState().isAuthenticated() 
+        ? <Navigate to={'/'} replace />
+        : <RegisterPage />
+    )
   }
 ]
 
@@ -55,11 +65,10 @@ function App() {
         {publicRoutes.map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />
         ))}
-        {/* <Route path="/unauthorized" element={<Unauthorized />} /> */}
-
+        <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Protected Routes */}
-        <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
+        <Route element={<ProtectedRoute allowedRoles={["Admin", "Owner"]} />}>
           <Route element={<Layout />}>
             {privateRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />

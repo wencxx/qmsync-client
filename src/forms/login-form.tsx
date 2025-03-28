@@ -14,7 +14,7 @@ import { useAuthStore } from "@/store/autStore"
 import { useState } from "react"
 import axios from "axios"
 import { toast } from "sonner"
-import { off } from "process"
+import { useNavigate } from "react-router-dom"
 
 interface credentials {
     username: string
@@ -25,6 +25,9 @@ export function LoginForm({
     className,
     ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+
+    const store = useAuthStore()
+    const navigate = useNavigate()
 
     const [credentials, setCredentials] = useState<credentials>({
         username: '',
@@ -44,8 +47,15 @@ export function LoginForm({
             setLoading(true)
             const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}auth/login`, credentials)
 
-            if(res.data === 'Login'){
+            if(res.data?.message === 'Login'){
+                const userData = res.data?.userData
+
+                localStorage.setItem('role', userData.role);
+                localStorage.setItem('token', userData.token);
+
+                store.login(userData)
                 
+                navigate('/')
             }else if(res.data === 'Invalid credentials'){
                 toast.error('Invalid Credentials', {
                     description: 'Make sure to enter correct credentials',
