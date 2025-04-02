@@ -14,12 +14,14 @@ export interface ControlForm2 {
   formId: string
   formName: string
   dueDate: string
-  placeholders: string[],
+  placeholders: string[]
+  filledOut: string[]
   fileUrl: string,
+  roles: string[],
   __v: number
 }
 
-export interface ControlForm3 {
+export interface CompletedControlledForms {
   _id: number
   formId: string
   formName: string
@@ -29,5 +31,20 @@ export interface ControlForm3 {
   placeholders: string[]
   createdAt: Date
   _v: string
+}
+
+export interface SubmittedForm {
+  _id: string
+  formId: string
+  userId: string
+  firstName: string
+  lastName: string
+  suffix: string
+  createdAt: string
+  _v: number
+}
+
+export interface FacultyFormsLists extends ControlForm2 {
+  submittedForm: SubmittedForm
 }
 

@@ -26,7 +26,7 @@ export const columns = (getPendingForms: () => void): ColumnDef<ControlForm2>[] 
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Form ID
+          Records ID
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -38,7 +38,7 @@ export const columns = (getPendingForms: () => void): ColumnDef<ControlForm2>[] 
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Form Name
+          Records Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -102,10 +102,10 @@ export const columns = (getPendingForms: () => void): ColumnDef<ControlForm2>[] 
           <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogContent className="!max-w-xl">
               <DialogHeader>
-                <DialogTitle>Fill out form</DialogTitle>
+                <DialogTitle>Fill out quality records</DialogTitle>
                 <DialogDescription></DialogDescription>
               </DialogHeader>
-              <DocumentsForm formFields={formToFill} formId={formId} setOpenDialog={setOpenDialog} getPendingForms={getPendingForms} endpoint="controlled-forms" />
+              <DocumentsForm formFields={formToFill} formId={formId} setOpenDialog={setOpenDialog} getPendingForms={getPendingForms} endpoint='quality-records' />
             </DialogContent>
           </Dialog>
         </>

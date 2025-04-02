@@ -1,24 +1,33 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useAuthStore } from "@/store/autStore";
+import { useAuthStore } from "@/store/authStore";
 import ProtectedRoute from "./routes/protected-routes";
 import Layout from "./layout/layout";
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
-import Unauthorized from "./pages/Unauthorized";
+import Unauthorized from './pages/unauthorized'
 import HomePage from "./pages/home";
 // documents
 import PendingControlledForms from "./pages/documents/pending-control-form";
 import CompletedControlledForms from "./pages/documents/completed-control-form";
+import PendingQualityRecords from "./pages/documents/pending-quality-records";
+import CompletedQualityRecords from "./pages/documents/completed-quality-records";
 // courses
-import DepartmentOfArchitecture from "./pages/courses/DOA";
+import DepartmentOfArchitecture from "./pages/courses/doa";
+import FacultyLists from "./pages/courses/faculty-lists";
+import FacultyFormsList from "./pages/courses/faculty-forms-lists";
+import FacultyRecordsLists from "./pages/courses/faculty-records-lists";
 // manage docs
 import ManageControlledForms from '@/pages/manage-documents/controlled-form'
+import ManageQualityRecords from '@/pages/manage-documents/quality-records'
+import { useEffect } from "react";
+import axios from "axios";
+import { UserData } from "./types/user";
 
 const publicRoutes = [
   {
     path: '/login',
     element: (
-      useAuthStore.getState().isAuthenticated() 
+      useAuthStore.getState().isAuthenticated()
         ? <Navigate to={'/'} replace />
         : <LoginPage />
     )
@@ -26,12 +35,23 @@ const publicRoutes = [
   {
     path: '/register',
     element: (
-      useAuthStore.getState().isAuthenticated() 
+      useAuthStore.getState().isAuthenticated()
         ? <Navigate to={'/'} replace />
         : <RegisterPage />
     )
   }
 ]
+
+// const depId = {
+//   doa: '67e6aa2ab5d09db7e19297c6',
+//   doit: '67e6aa7a8ef633b881f12401',
+//   docame: '67e6aaa98ef633b881f12403',
+//   docge: '67e6aac98ef633b881f12405',
+//   doee: '67e82a42f582f7a3535396f7',
+//   doese: '67e82a60f582f7a3535396f9',
+//   domam: '67e82a79f582f7a3535396fb'
+// }
+
 
 const privateRoutes = [
   {
@@ -47,17 +67,64 @@ const privateRoutes = [
     element: <CompletedControlledForms />
   },
   {
+    path: '/pending-quality-records',
+    element: <PendingQualityRecords />
+  },
+  {
+    path: '/completed-quality-records',
+    element: <CompletedQualityRecords />
+  },
+  {
     path: '/manage-controlled-forms',
     element: <ManageControlledForms />
   },
   {
-    path: '/deparment-of-architectures',
+    path: '/manage-quality-records',
+    element: <ManageQualityRecords />
+  },
+  {
+    path: '/department-of-architectures',
     element: <DepartmentOfArchitecture />
+  },
+  {
+    path: '/:dep/faculty-lists/:id',
+    element: <FacultyLists />,
+  },
+  {
+    path: '/:dep/faculty-form-lists/:facultyId',
+    element: <FacultyFormsList />
+  },
+  {
+    path: '/:dep/faculty-records-lists/:facultyId',
+    element: <FacultyRecordsLists />
   },
 ]
 
 
 function App() {
+  const setUser = useAuthStore((state) => state.setUser)
+  const token = localStorage.getItem('token')
+
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        const response = await axios.get<UserData>('http://localhost:3000/auth/get-current-user', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+
+        setUser(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    if (token) {
+      getCurrentUser()
+    }
+  }, [token])
+
   return (
     <Router>
       <Routes>

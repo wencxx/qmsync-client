@@ -42,7 +42,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { useState } from "react"
-import { useAuthStore } from "@/store/autStore"
+import { useAuthStore } from "@/store/authStore"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -52,13 +52,13 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { UserData } from "@/types/user"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -70,11 +70,7 @@ const formSchema = z.object({
 export function NavUser({
   user,
 }: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
+  user: UserData | null
 }) {
   const { isMobile } = useSidebar()
   const navigate = useNavigate()
@@ -84,12 +80,10 @@ export function NavUser({
 
   const store = useAuthStore()
 
-  const logout = () => {
+  const logout = async () => {
     store.logout()
     navigate('/login')
-    toast.success('Logged out successfully.', {
-      position: 'top-center'
-    })
+    window.location.href = "/login";
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -103,6 +97,8 @@ export function NavUser({
     console.log(values)
   }
 
+  const userInitials = user?.firstName?.slice(0, 1) + '' + user?.lastName?.slice(0, 1)
+
   return (
     <>
       <SidebarMenu>
@@ -114,12 +110,12 @@ export function NavUser({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">WB</AvatarFallback>
+                  {/* <AvatarImage src={user.avatar} alt={user.firstName} /> */}
+                  <AvatarFallback className="rounded-lg">{userInitials || 'QM'}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate font-semibold">{user?.firstName} {user?.middleName} {user?.lastName}</span>
+                  <span className="truncate text-xs">{user?.email}</span>
                 </div>
                 <ChevronsUpDown className="ml-auto size-4" />
               </SidebarMenuButton>
@@ -133,12 +129,12 @@ export function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">WB</AvatarFallback>
+                    {/* <AvatarImage src={user?.avatar} alt={user?.firstName} /> */}
+                    <AvatarFallback className="rounded-lg">{userInitials || 'QM'}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">{user.name}</span>
-                    <span className="truncate text-xs">{user.email}</span>
+                    <span className="truncate font-semibold">{user?.firstName} {user?.middleName} {user?.lastName}</span>
+                    <span className="truncate text-xs">{user?.email}</span>
                   </div>
                 </div>
               </DropdownMenuLabel>

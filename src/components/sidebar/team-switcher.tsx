@@ -3,9 +3,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Departments } from "@/types/departments"
 import { GalleryVerticalEnd } from 'lucide-react'
 
-export function TeamSwitcher() {
+export function TeamSwitcher({ department }: {
+  department: Departments | undefined
+}) {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -20,7 +23,7 @@ export function TeamSwitcher() {
             <span className="truncate font-semibold">
               QMS and Synchrony/Synchronization
             </span>
-            <span className="truncate text-xs">short descrption here!!!</span>
+            <span className="truncate text-xs">{department?.department}</span>
           </div>
         </SidebarMenuButton>
       </SidebarMenuItem>

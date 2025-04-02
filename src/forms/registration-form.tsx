@@ -30,7 +30,8 @@ import { useForm } from "react-hook-form"
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import { toast } from "sonner"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { Departments } from "@/types/departments"
 
 export function RegisterForm({
     className,
@@ -38,6 +39,24 @@ export function RegisterForm({
 }: React.ComponentProps<"div">) {
 
     const navigate = useNavigate()
+
+    const [departments, setDepartments] = useState<Departments[]>([])
+
+    useEffect(() => {
+        const getDepartments = async () => {
+            try {
+                const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}departments/get`)
+
+                if (res.data !== 'No departments found') {
+                    setDepartments(res.data)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        getDepartments()
+    }, [])
 
     const form = useForm<z.infer<typeof registerSchema>>({
         resolver: zodResolver(registerSchema),
@@ -73,7 +92,7 @@ export function RegisterForm({
                     position: 'top-center'
                 })
                 navigate('/login')
-            } else if(res.data === 'Username must be unique'){
+            } else if (res.data === 'Username must be unique') {
                 toast.warning('Username is already in use.', {
                     description: 'Choose a different username',
                     position: 'top-center',
@@ -213,10 +232,9 @@ export function RegisterForm({
                                                         <SelectValue placeholder="Select Department" />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value="Department of Architecture">Department of Architecture</SelectItem>
-                                                        <SelectItem value="Department of Industrial Engineering">Department of Industrial Engineering</SelectItem>
-                                                        <SelectItem value="Department of Chemical and Mining Engineering">Department of Chemical and Mining Engineering</SelectItem>
-                                                        <SelectItem value="Department of Civil and Geodetic Engineering">Department of Civil and Geodetic Engineering</SelectItem>
+                                                        {departments.map((department) => (
+                                                            <SelectItem key={department._id} value={department._id}>{department.department}</SelectItem>
+                                                        ))}
                                                     </SelectContent>
                                                 </Select>
                                             </FormControl>
@@ -268,8 +286,7 @@ export function RegisterForm({
                                                     <SelectItem value="Faculty">Faculty</SelectItem>
                                                     <SelectItem value="Head">Department Head</SelectItem>
                                                     <SelectItem value="Controller">Document Controller</SelectItem>
-                                                    <SelectItem value="Owner">Process Owner</SelectItem>
-                                                    <SelectItem value="Admin">Admin</SelectItem>
+                                                    <SelectItem value="Dean">Process Owner - Dean</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>

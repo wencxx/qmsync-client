@@ -2,13 +2,13 @@ import { useState } from "react"
 import { Folder } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Link } from "react-router-dom"
 
 function DepartmentOfArchitecture() {
     const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
 
     const handleFolderClick = (folderName: string) => {
         setSelectedFolder(folderName)
-        console.log(`Opening ${folderName}`)
     }
 
     return (
@@ -25,7 +25,9 @@ function DepartmentOfArchitecture() {
                         <Folder className="h-24 w-24 text-primary mb-4" />
                         <h2 className="text-xl font-semibold">Controlled Forms</h2>
                         <p className="text-muted-foreground mt-2 text-center">Access and manage all controlled form documents</p>
-                        <Button className="mt-4">Open Folder</Button>
+                        <Link to="/department-of-architectures/faculty-lists/67e6aa2ab5d09db7e19297c6?q=controlled-forms">
+                            <Button className="mt-4">Open Folder</Button>
+                        </Link>
                     </CardContent>
                 </Card>
 
@@ -38,7 +40,9 @@ function DepartmentOfArchitecture() {
                         <Folder className="h-24 w-24 text-primary mb-4" />
                         <h2 className="text-xl font-semibold">Quality Records</h2>
                         <p className="text-muted-foreground mt-2 text-center">Access and manage all quality record documents</p>
-                        <Button className="mt-4">Open Folder</Button>
+                        <Link to="/department-of-architectures/faculty-lists/67e6aa2ab5d09db7e19297c6?q=quality-records">
+                            <Button className="mt-4">Open Folder</Button>
+                        </Link>
                     </CardContent>
                 </Card>
             </div>

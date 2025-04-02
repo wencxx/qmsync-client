@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Link } from "react-router-dom"
-import { useAuthStore } from "@/store/autStore"
+import { useAuthStore } from "@/store/authStore"
 import { useState } from "react"
 import axios from "axios"
 import { toast } from "sonner"

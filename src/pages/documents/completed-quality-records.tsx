@@ -1,27 +1,27 @@
 import { columns } from "@/components/data-table/columns/form-control-columns"
 import { DataTable } from "@/components/data-table/data-table"
 import { useAuthStore } from "@/store/authStore"
-import type { CompletedControlledForms } from "@/types/control-form"
+import type { ControlForm3 } from "@/types/control-form"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
-function CompletedControlledForms() {
-  const [forms, setForms] = useState<CompletedControlledForms[]>([])
+function CompletedQualityRecords() {
+  const [forms, setForms] = useState<ControlForm3[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
   const user = useAuthStore((state) => state.user)
 
   const getCompletedForms = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/completed/${user?._id}`)
+      const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}quality-records/completed/${user?._id}`)
 
       if(res.data !== 'No forms found'){
         setForms(res.data)
       }
     } catch (error) {
       console.log(error)
-      toast.error("Failed to fetch completed forms")
+      toast.error("Failed to fetch quality records")
     } finally {
       setLoading(false)
     }
@@ -35,10 +35,10 @@ function CompletedControlledForms() {
 
   return (
     <>
-      <h1 className="font-bold text-2xl">Completed Controlled Forms</h1>
+      <h1 className="font-bold text-2xl">Completed Quality Records  </h1>
       <DataTable columns={columns} data={forms} isLoading={loading} />
     </>
   );
 }
 
-export default CompletedControlledForms;
+export default CompletedQualityRecords;

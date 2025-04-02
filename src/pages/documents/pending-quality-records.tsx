@@ -1,4 +1,4 @@
-import { columns } from "@/components/data-table/columns/pending-form-controlled-columns"
+import { columns } from "@/components/data-table/columns/pending-quality-records-column"
 import { DataTable } from "@/components/data-table/data-table"
 import type { ControlForm2 } from "@/types/control-form"
 import { useEffect, useState } from "react"
@@ -6,7 +6,7 @@ import axios from "axios"
 import { toast } from "sonner"
 import { useAuthStore } from "@/store/authStore"
 
-function PendingControlledForms() {
+function PendingQualityRecords() {
   const [pendingForms, setPendingForms] = useState<ControlForm2[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -15,7 +15,7 @@ function PendingControlledForms() {
   const getPendingForms = async () => {
 
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/pending/${user?._id}`)
+      const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}quality-records/pending/${user?._id}`)
 
       if (res.data !== 'No forms found') {
         setPendingForms(res.data)
@@ -39,10 +39,10 @@ function PendingControlledForms() {
 
   return (
     <>
-      <h1 className="font-bold text-2xl">Pending Controlled Forms</h1>
+      <h1 className="font-bold text-2xl">Pending Quality Records</h1>
       <DataTable columns={columns(getPendingForms)} data={pendingForms} isLoading={loading} />
     </>
   );
 }
 
-export default PendingControlledForms;
+export default PendingQualityRecords;

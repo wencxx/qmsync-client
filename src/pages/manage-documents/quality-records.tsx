@@ -35,8 +35,7 @@ const roles: Option[] = [
   { value: "Dean", label: "Process Owner - Dean" },
 ]
 
-
-function ManageControlledForms() {
+function ManageQualityRecords() {
   // add form
   const [openDialog, setOpenDialog] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -62,7 +61,7 @@ function ManageControlledForms() {
 
     try {
       setIsLoading(true)
-      const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}controlled-forms/add`, formData, {
+      const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}quality-records/add`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -87,7 +86,7 @@ function ManageControlledForms() {
   const [loading, setLoading] = useState<boolean>(true)
   const getForms = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/get`)
+      const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}quality-records/get`)
 
       if (res.data !== 'No forms found') {
         setForms(res.data)
@@ -108,7 +107,7 @@ function ManageControlledForms() {
   return (
     <>
       <div className="flex items-center justify-between">
-        <h1 className="font-bold text-2xl">Manage Controlled Forms</h1>
+        <h1 className="font-bold text-2xl">Manage Quality Records</h1>
         <Button onClick={() => setOpenDialog(true)}>
           <Plus />
           Add Form
@@ -120,9 +119,9 @@ function ManageControlledForms() {
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add New Controlled Form</DialogTitle>
+            <DialogTitle>Add New Quality Record</DialogTitle>
             <DialogDescription>
-              Fill out the details below to add a new controlled form.
+              Fill out the details below to add a new quality record.
             </DialogDescription>
           </DialogHeader>
           {/* Add form fields here */}
@@ -133,7 +132,7 @@ function ManageControlledForms() {
                 name="formId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Form ID</FormLabel>
+                    <FormLabel>Record ID</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -146,7 +145,7 @@ function ManageControlledForms() {
                 name="formName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Form Name</FormLabel>
+                    <FormLabel>Record Name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -218,4 +217,4 @@ function ManageControlledForms() {
   );
 }
 
-export default ManageControlledForms;
+export default ManageQualityRecords;

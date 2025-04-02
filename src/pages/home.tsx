@@ -1,19 +1,28 @@
-import { FileText, Info } from "lucide-react"
+import { FileText, Info, Plus } from "lucide-react"
 import { format } from "date-fns"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useAuthStore } from "@/store/authStore"
 
 function HomePage() {
+    const store = useAuthStore()
+
     return (
         <>
             <div className="grid gap-6">
-                <div>
+                <div className="flex justify-between items-center">
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
                         <p className="text-muted-foreground">Welcome back! Here's what's happening.</p>
                     </div>
+                    {store.hasRole('Admin') && (
+                        <Button>
+                            <Plus />
+                            Add news
+                        </Button>
+                    )}
                 </div>
                 <Tabs defaultValue="announcements">
                     <TabsList className="grid w-full grid-cols-2">

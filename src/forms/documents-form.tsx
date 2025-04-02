@@ -13,8 +13,11 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useAuthStore } from "@/store/authStore";
 
-function ControlledForm({ formFields, formId, getPendingForms }: { formFields: string[], formId: string, getPendingForms: () => void }) {
+function DocumentsForm({ formFields, formId, setOpenDialog, getPendingForms, endpoint }: { formFields: string[], formId: string, setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>, getPendingForms: () => void, endpoint: string }) {
+
+    const user = useAuthStore((state) => state.user)
 
     const form = useForm<{ [key: string]: string }>({
         defaultValues: formFields.reduce((acc, field) => ({ ...acc, [field]: "" }), {}),
@@ -30,13 +33,14 @@ function ControlledForm({ formFields, formId, getPendingForms }: { formFields: s
             const data = {
                 ...values,
                 formId: formId,
-                userId: 'asdasd'
+                userId: user?._id,
             }
 
-            const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}controlled-forms/submit`, data)
+            const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}${endpoint}/submit`, data)
             
             if(res.data === 'success'){
                 getPendingForms()
+                setOpenDialog(false)
                 toast.success('Submitted controlled form successfully.')
             }else{
                 toast.error('Failed to submit controlled form.')
@@ -82,4 +86,4 @@ function ControlledForm({ formFields, formId, getPendingForms }: { formFields: s
     );
 }
 
-export default ControlledForm;
+export default DocumentsForm;

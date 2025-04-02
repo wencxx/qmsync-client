@@ -70,6 +70,26 @@ export const columns: ColumnDef<ControlForm2>[] = [
     cell: ({ row }) => <div>{formatDate(row.getValue("dueDate"))}</div>,
   },
   {
+    accessorKey: "roles",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Assigned To
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+        const form = row.original
+
+        return (
+          <div>
+            {form.roles.filter(Boolean).join(', ')}
+          </div>
+        )
+    },
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       const form = row.original

@@ -1,6 +1,5 @@
 import * as React from "react"
 import {
-  BookOpen,
   FileCheck,
   FileText,
   PencilRuler,
@@ -17,6 +16,7 @@ import { NavDocs } from "@/components/sidebar/nav-documents"
 import { NavSingle } from "@/components/sidebar/nav-main"
 import { NavUser } from "@/components/sidebar/nav-user"
 import { TeamSwitcher } from "@/components/sidebar/team-switcher"
+import { useAuthStore } from "@/store/authStore"
 import {
   Sidebar,
   SidebarContent,
@@ -27,15 +27,10 @@ import {
 
 // This is sample data.
 const data = {
-  user: {
-    name: "Wency Baterna",
-    email: "wncbtrn@gmail.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   main: [
     {
       name: "Dashboard",
-      url: "#",
+      url: "/",
       icon: Megaphone,
     },
   ],
@@ -62,11 +57,11 @@ const data = {
       items: [
         {
           title: "Pending",
-          url: "#",
+          url: "/pending-quality-records",
         },
         {
           title: "Completed",
-          url: "#",
+          url: "/completed-quality-records",
         }
       ],
     }
@@ -79,14 +74,14 @@ const data = {
     },
     {
       name: "Quality Records",
-      url: "#",
+      url: "/manage-quality-records",
       icon: FileCheck,
     }
   ],
   courses: [
     {
       name: "Department of Architecture",
-      url: "/deparment-of-architectures",
+      url: "/department-of-architectures",
       icon: PencilRuler,
     },
     {
@@ -123,10 +118,13 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+  const userData = useAuthStore((state) => state.user)
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher />
+        <TeamSwitcher department={userData?.department} />
       </SidebarHeader>
       <SidebarContent>
         <NavSingle main={data.main} title="main" />
@@ -135,7 +133,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSingle main={data.manageDocuments} title="manage documents" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
