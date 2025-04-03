@@ -32,7 +32,8 @@ const roles: Option[] = [
   { value: "Faculty", label: "Faculty" },
   { value: "Head", label: "Department Head" },
   { value: "Controller", label: "Document Controller" },
-  { value: "Dean", label: "Process Owner - Dean" },
+  { value: "Custodians", label: "Lab Custodians" },
+  { value: "Dean", label: "Process Owner - Dean" }
 ]
 
 

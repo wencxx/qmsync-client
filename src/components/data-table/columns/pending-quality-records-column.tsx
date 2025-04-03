@@ -26,7 +26,7 @@ export const columns = (getPendingForms: () => void): ColumnDef<ControlForm2>[] 
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Records ID
+          Record ID
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -38,7 +38,7 @@ export const columns = (getPendingForms: () => void): ColumnDef<ControlForm2>[] 
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Records Name
+          Record Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )

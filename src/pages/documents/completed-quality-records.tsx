@@ -1,13 +1,13 @@
-import { columns } from "@/components/data-table/columns/form-control-columns"
+import { columns } from "@/components/data-table/columns/quality-record-columns"
 import { DataTable } from "@/components/data-table/data-table"
 import { useAuthStore } from "@/store/authStore"
-import type { ControlForm3 } from "@/types/control-form"
+import type { CompletedControlledForms } from "@/types/control-form"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 function CompletedQualityRecords() {
-  const [forms, setForms] = useState<ControlForm3[]>([])
+  const [forms, setForms] = useState<CompletedControlledForms[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
   const user = useAuthStore((state) => state.user)

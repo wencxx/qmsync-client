@@ -22,7 +22,8 @@ function FacultyLists() {
                 const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}faculties/get/${id}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
+                    },
+                    validateStatus: (status => status < 500)
                 })
 
                 if (res.status === 200) {
@@ -59,13 +60,14 @@ function FacultyLists() {
                     Array.from({ length: 5 }, (_, index) => (
                         <Skeleton key={index} className="w-50 h-33 border rounded-xl" />
                     ))
-                ) : (
+                ) : (faculties.length ? (
                     q === 'controlled-forms' ? (
                         faculties.length && faculties?.map((faculty) => (
                             <Link to={`/${dep}/faculty-form-lists/${faculty._id}?q=${q}`} key={faculty._id} replace>
                                 <Card className="flex flex-col gap-y-1 items-center w-fit p-5 cursor-pointer hover:border hover:border-main">
                                     <Folder size='60' />
-                                    <p>{[faculty.firstName, faculty.middleName, faculty.lastName].filter(Boolean).join(' ')}</p>
+                                    <p className="font-medium">{[faculty.firstName, faculty.middleName, faculty.lastName].filter(Boolean).join(' ')}</p>
+                                    <p className="text-sm">{faculty.role}</p>
                                 </Card>
                             </Link>
                         ))
@@ -74,14 +76,15 @@ function FacultyLists() {
                             <Link to={`/${dep}/faculty-records-lists/${faculty._id}?q=${q}`} key={faculty._id} replace>
                                 <Card className="flex flex-col gap-y-1 items-center w-fit p-5 cursor-pointer hover:border hover:border-main">
                                     <Folder size='60' />
-                                    <p>{[faculty.firstName, faculty.middleName, faculty.lastName].filter(Boolean).join(' ')}</p>
+                                    <p className="font-medium">{[faculty.firstName, faculty.middleName, faculty.lastName].filter(Boolean).join(' ')}</p>
+                                    <p className="text-sm">{faculty.role}</p>
                                 </Card>
                             </Link>
                         ))
                     ) : (
                         <Navigate to={`/${dep}`} />
                     )
-                )}
+                ) : 'No faculties found' )}
             </div>
         </>
     );

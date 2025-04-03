@@ -286,6 +286,7 @@ export function RegisterForm({
                                                     <SelectItem value="Faculty">Faculty</SelectItem>
                                                     <SelectItem value="Head">Department Head</SelectItem>
                                                     <SelectItem value="Controller">Document Controller</SelectItem>
+                                                    <SelectItem value="Custodians">Lab Custodians</SelectItem>
                                                     <SelectItem value="Dean">Process Owner - Dean</SelectItem>
                                                 </SelectContent>
                                             </Select>

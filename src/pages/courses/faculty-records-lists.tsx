@@ -20,10 +20,11 @@ function FacultyRecordsLists() {
     useEffect(() => {
         const getAllQualityRecords = async () => {
             try {
-                const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}quality-records/get-faculty-records`, {
+                const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}quality-records/get-faculty-records/${userData.role}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
+                    },
+                    validateStatus: (status => status < 500)
                 })
 
                 if(res.status === 200){
@@ -63,7 +64,6 @@ function FacultyRecordsLists() {
                     }, 1000);
                 }else{
                     setUserData(res.data)
-                    getAllQualityRecords()
                 }
             } catch (error) {
                 console.log(error)
@@ -77,7 +77,11 @@ function FacultyRecordsLists() {
         if(facultyId){
             getFacultyDetails()
         }
-    }, [facultyId])
+
+        if(userData.role){
+            getAllQualityRecords()
+        }
+    }, [facultyId, userData.role])
 
     if(q !== 'quality-records') return <Navigate to={`/${dep}`} />
 

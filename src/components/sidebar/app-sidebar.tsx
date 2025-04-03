@@ -86,32 +86,32 @@ const data = {
     },
     {
       name: "Department of Industrial Engineering",
-      url: "#",
+      url: "/department-of-industrial-engineering",
       icon: Factory ,
     },
     {
       name: "Department of Chemical and Mining Engineering",
-      url: "#",
+      url: "/department-of-chemical-and-mining-engineering",
       icon: FlaskConical,
     },
     {
       name: "Department of Civil and Geodetic Engineering",
-      url: "#",
+      url: "/department-of-civil-and-geodetic-engineering",
       icon: Map,
     },
     {
       name: "Department of Electrical Engineering",
-      url: "#",
+      url: "/department-of-electrical-engineering",
       icon: Plug,
     },
     {
       name: "Department of Electronics Engineering",
-      url: "#",
+      url: "/department-of-electronics-engineering",
       icon: Cpu,
     },
     {
       name: "Department of Mechanical and Mechatronics",
-      url: "#",
+      url: "/department-of-mechanical-engineering-mechatronics",
       icon: Wrench,
     },
   ],

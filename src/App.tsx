@@ -12,7 +12,7 @@ import CompletedControlledForms from "./pages/documents/completed-control-form";
 import PendingQualityRecords from "./pages/documents/pending-quality-records";
 import CompletedQualityRecords from "./pages/documents/completed-quality-records";
 // courses
-import DepartmentOfArchitecture from "./pages/courses/doa";
+import Departments from "./pages/courses/departments";
 import FacultyLists from "./pages/courses/faculty-lists";
 import FacultyFormsList from "./pages/courses/faculty-forms-lists";
 import FacultyRecordsLists from "./pages/courses/faculty-records-lists";
@@ -41,16 +41,6 @@ const publicRoutes = [
     )
   }
 ]
-
-// const depId = {
-//   doa: '67e6aa2ab5d09db7e19297c6',
-//   doit: '67e6aa7a8ef633b881f12401',
-//   docame: '67e6aaa98ef633b881f12403',
-//   docge: '67e6aac98ef633b881f12405',
-//   doee: '67e82a42f582f7a3535396f7',
-//   doese: '67e82a60f582f7a3535396f9',
-//   domam: '67e82a79f582f7a3535396fb'
-// }
 
 
 const privateRoutes = [
@@ -83,8 +73,8 @@ const privateRoutes = [
     element: <ManageQualityRecords />
   },
   {
-    path: '/department-of-architectures',
-    element: <DepartmentOfArchitecture />
+    path: '/:dep',
+    element: <Departments />
   },
   {
     path: '/:dep/faculty-lists/:id',

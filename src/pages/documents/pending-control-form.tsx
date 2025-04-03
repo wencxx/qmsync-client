@@ -15,7 +15,7 @@ function PendingControlledForms() {
   const getPendingForms = async () => {
 
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/pending/${user?._id}`)
+      const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/pending/${user?._id}/${user?.role}`)
 
       if (res.data !== 'No forms found') {
         setPendingForms(res.data)

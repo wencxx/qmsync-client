@@ -18,7 +18,7 @@ import { toast } from "sonner"
 export const columns: ColumnDef<CompletedControlledForms>[] = [
   {
     accessorKey: "formId",
-    header: "Form ID",
+    header: "Record ID",
     cell: ({ row }) => <div>{row.getValue("formId")}</div>,
   },
   {
@@ -26,7 +26,7 @@ export const columns: ColumnDef<CompletedControlledForms>[] = [
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Form Name
+          Record Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -76,11 +76,11 @@ export const columns: ColumnDef<CompletedControlledForms>[] = [
 
       const generateDocx = async () => {
         try {
-          const response = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/generateDocs/${form.submittedFormId}`, {
+          const response = await axios.get(`${import.meta.env.VITE_ENDPOINT}quality-records/generateDocs/${form.submittedFormId}`, {
             responseType: "blob",
           });
 
-          if(response.data === 'Form not found'){
+          if(response.data === 'Record not found'){
             toast('Failed generating form.')
             return
           }
@@ -88,7 +88,31 @@ export const columns: ColumnDef<CompletedControlledForms>[] = [
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", `${form.formName}-form-controlled.docx`);
+          link.setAttribute("download", `${form.formName}-quality-record.docx`);
+          document.body.appendChild(link);
+          link.click();
+
+          window.URL.revokeObjectURL(url);
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+      const generatePDF = async () => {
+        try {
+          const response = await axios.get(`${import.meta.env.VITE_ENDPOINT}quality-records/generatePDF/${form.submittedFormId}`, {
+            responseType: "blob",
+          });
+
+          if(response.data === 'Record not found'){
+            toast('Failed generating form.')
+            return
+          }
+
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `${form.formName}-quality-record.pdf`);
           document.body.appendChild(link);
           link.click();
 
@@ -110,7 +134,7 @@ export const columns: ColumnDef<CompletedControlledForms>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(form.formId)}>Copy form ID</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => generatePDF()}>
               <FileText className="mr-2 h-4 w-4" />
               Export as PDF
             </DropdownMenuItem>

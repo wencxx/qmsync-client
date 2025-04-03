@@ -20,10 +20,11 @@ function FacultyFormsList() {
     useEffect(() => {
         const getAllControlledForms = async () => {
             try {
-                const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/get-faculty-forms`, {
+                const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/get-faculty-forms/${userData.role}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
+                    },
+                    validateStatus: (status => status < 500)
                 })
 
                 if(res.status === 200){
@@ -63,7 +64,6 @@ function FacultyFormsList() {
                     }, 1000);
                 }else{
                     setUserData(res.data)
-                    getAllControlledForms()
                 }
             } catch (error) {
                 console.log(error)
@@ -77,7 +77,11 @@ function FacultyFormsList() {
         if(facultyId){
             getFacultyDetails()
         }
-    }, [facultyId])
+
+        if(userData.role){
+            getAllControlledForms()
+        }
+    }, [facultyId, userData.role])
 
     if(q !== 'controlled-forms') return <Navigate to={`/${dep}`} />
 
