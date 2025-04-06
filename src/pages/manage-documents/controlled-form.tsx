@@ -31,9 +31,7 @@ import { MultiSelect, Option } from "@/components/ui/multi-select"
 const roles: Option[] = [
   { value: "Faculty", label: "Faculty" },
   { value: "Head", label: "Department Head" },
-  { value: "Controller", label: "Document Controller" },
   { value: "Custodians", label: "Lab Custodians" },
-  { value: "Dean", label: "Process Owner - Dean" }
 ]
 
 
@@ -89,7 +87,9 @@ function ManageControlledForms() {
   
   const getForms = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/get`)
+      const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/get`, {
+        validateStatus: (status => status < 500)
+      })
 
       if (res.data !== 'No forms found') {
         setForms(res.data)
@@ -97,7 +97,7 @@ function ManageControlledForms() {
         setForms([])
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     } finally {
       setLoading(false)
     }

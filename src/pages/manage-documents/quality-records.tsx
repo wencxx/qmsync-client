@@ -31,9 +31,7 @@ import { MultiSelect, Option } from "@/components/ui/multi-select"
 const roles: Option[] = [
   { value: "Faculty", label: "Faculty" },
   { value: "Head", label: "Department Head" },
-  { value: "Controller", label: "Document Controller" },
   { value: "Custodians", label: "Lab Custodians" },
-  { value: "Dean", label: "Process Owner - Dean" }
 ]
 
 function ManageQualityRecords() {

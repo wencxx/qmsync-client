@@ -123,10 +123,6 @@ export const columns = (getForms: () => Promise<void>): ColumnDef<ControlForm2>[
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => navigator.clipboard.writeText(form.formId)}>Copy form ID</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Eye className="mr-2 h-4 w-4" />
-                View details
-              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => window.open(form.fileUrl, "_blank")}>
                 <FileText className="mr-2 h-4 w-4" />
                 Download form
