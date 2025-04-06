@@ -14,6 +14,7 @@ import type { CompletedControlledForms } from "@/types/control-form"
 import { formatDate } from "@/lib/utils"
 import axios from "axios"
 import { toast } from "sonner"
+import ConvertApi from 'convertapi-js';
 
 export const columns: ColumnDef<CompletedControlledForms>[] = [
   {
@@ -97,30 +98,52 @@ export const columns: ColumnDef<CompletedControlledForms>[] = [
           console.log(error)
         }
       }
-
+      
       const generatePDF = async () => {
+        const toastId = toast.loading('Generating pdf...', {
+          position: 'top-right'
+        });
         try {
-          const response = await axios.get(`${import.meta.env.VITE_ENDPOINT}quality-records/generatePDF/${form.submittedFormId}`, {
-            responseType: "blob",
+          const response = await axios.get(`${import.meta.env.VITE_ENDPOINT}quality-records/generateDocs/${form.submittedFormId}`, {
+            responseType: 'blob',
           });
 
-          if(response.data === 'Record not found'){
-            toast('Failed generating form.')
-            return
+          if (response.status !== 200) {
+            toast('Failed generating form.');
+            return;
           }
 
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", `${form.formName}-quality-record.pdf`);
+          let convertApi = ConvertApi.auth('secret_DMPqpeqfWbt4HgPC');
+
+          let params = convertApi.createParams();
+          const fileBlob = new Blob([response.data], { type: 'application/msword' });
+          const file = new File([fileBlob], 'document.docx', { type: 'application/msword' });
+
+          params.add('File', file);
+
+          const result = await convertApi.convert('docx', 'pdf', params);
+
+          if (!result) {
+            toast('Failed converting to PDF.');
+            return;
+          }
+
+          const pdfUrl = result.files[0].Url;
+
+          const link = document.createElement('a');
+          link.href = pdfUrl;
+          link.setAttribute('download', `${form.formName}-quality-record.pdf`);
           document.body.appendChild(link);
           link.click();
+          document.body.removeChild(link);
 
-          window.URL.revokeObjectURL(url);
         } catch (error) {
-          console.log(error)
+          console.error(error);
+          toast('Error generating PDF.');
+        } finally {
+          toast.dismiss(toastId)
         }
-      }
+      };
 
       return (
         <DropdownMenu>

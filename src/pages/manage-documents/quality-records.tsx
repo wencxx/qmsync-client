@@ -1,4 +1,4 @@
-import { columns } from "@/components/data-table/columns/manage-form-control-columns"
+import { columns } from "@/components/data-table/columns/manage-quality-records-columns"
 import { DataTable } from "@/components/data-table/data-table"
 import { Button } from "@/components/ui/button";
 import type { ControlForm2 } from "@/types/control-form"
@@ -85,6 +85,7 @@ function ManageQualityRecords() {
   // get forms
   const [forms, setForms] = useState<ControlForm2[]>([])
   const [loading, setLoading] = useState<boolean>(true)
+  
   const getForms = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}quality-records/get`)
@@ -92,7 +93,7 @@ function ManageQualityRecords() {
       if (res.data !== 'No forms found') {
         setForms(res.data)
       } else {
-        console.log(res.data)
+        setForms([])
       }
     } catch (error) {
       console.log(error)
@@ -114,7 +115,7 @@ function ManageQualityRecords() {
           Add Form
         </Button>
       </div>
-      <DataTable columns={columns} data={forms} isLoading={loading} />
+      <DataTable columns={columns(getForms)} data={forms} isLoading={loading} />
 
       {/* dialog for adding new form */}
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>

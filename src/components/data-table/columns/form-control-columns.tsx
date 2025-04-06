@@ -14,6 +14,7 @@ import type { CompletedControlledForms } from "@/types/control-form"
 import { formatDate } from "@/lib/utils"
 import axios from "axios"
 import { toast } from "sonner"
+import ConvertApi from 'convertapi-js';
 
 export const columns: ColumnDef<CompletedControlledForms>[] = [
   {
@@ -80,7 +81,7 @@ export const columns: ColumnDef<CompletedControlledForms>[] = [
             responseType: "blob",
           });
 
-          if(response.data === 'Form not found'){
+          if (response.data === 'Form not found') {
             toast('Failed generating form.')
             return
           }
@@ -98,6 +99,52 @@ export const columns: ColumnDef<CompletedControlledForms>[] = [
         }
       }
 
+      const generatePDF = async () => {
+        const toastId = toast.loading('Generating pdf...', {
+          position: 'top-right'
+        });
+        try {
+          const response = await axios.get(`${import.meta.env.VITE_ENDPOINT}controlled-forms/generateDocs/${form.submittedFormId}`, {
+            responseType: 'blob',
+          });
+
+          if (response.status !== 200) {
+            toast('Failed generating form.');
+            return;
+          }
+
+          let convertApi = ConvertApi.auth('secret_DMPqpeqfWbt4HgPC');
+
+          let params = convertApi.createParams();
+          const fileBlob = new Blob([response.data], { type: 'application/msword' });
+          const file = new File([fileBlob], 'document.docx', { type: 'application/msword' });
+
+          params.add('File', file);
+
+          const result = await convertApi.convert('docx', 'pdf', params);
+
+          if (!result) {
+            toast('Failed converting to PDF.');
+            return;
+          }
+
+          const pdfUrl = result.files[0].Url;
+
+          const link = document.createElement('a');
+          link.href = pdfUrl;
+          link.setAttribute('download', `${form.formName}-quality-record.pdf`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+        } catch (error) {
+          console.error(error);
+          toast('Error generating PDF.');
+        } finally {
+          toast.dismiss(toastId)
+        }
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -110,7 +157,7 @@ export const columns: ColumnDef<CompletedControlledForms>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(form.formId)}>Copy form ID</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => generatePDF()}>
               <FileText className="mr-2 h-4 w-4" />
               Export as PDF
             </DropdownMenuItem>

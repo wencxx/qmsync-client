@@ -11,7 +11,6 @@ import {
   Wrench,
   Megaphone 
 } from "lucide-react"
-
 import { NavDocs } from "@/components/sidebar/nav-documents"
 import { NavSingle } from "@/components/sidebar/nav-main"
 import { NavUser } from "@/components/sidebar/nav-user"
@@ -120,7 +119,7 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const userData = useAuthStore((state) => state.user)
-
+  const role = userData?.role
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -128,9 +127,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavSingle main={data.main} title="main" />
-        <NavDocs items={data.documents} title="documents" />
-        <NavSingle main={data.courses} title="storage" />
-        <NavSingle main={data.manageDocuments} title="manage documents" />
+        {role == 'Controller' && <NavDocs items={data.documents} title="documents" />}
+        {role == 'Controller' && (
+          <>
+            <NavSingle main={data.courses} title="storage" />
+            <NavSingle main={data.manageDocuments} title="manage documents" />
+          </>
+        )}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={userData} />

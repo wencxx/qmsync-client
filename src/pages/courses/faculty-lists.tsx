@@ -63,7 +63,7 @@ function FacultyLists() {
                 ) : (faculties.length ? (
                     q === 'controlled-forms' ? (
                         faculties.length && faculties?.map((faculty) => (
-                            <Link to={`/${dep}/faculty-form-lists/${faculty._id}?q=${q}`} key={faculty._id} replace>
+                            <Link to={`/${dep}/faculty-form-lists/${faculty._id}?q=${q}`} key={faculty._id}>
                                 <Card className="flex flex-col gap-y-1 items-center w-fit p-5 cursor-pointer hover:border hover:border-main">
                                     <Folder size='60' />
                                     <p className="font-medium">{[faculty.firstName, faculty.middleName, faculty.lastName].filter(Boolean).join(' ')}</p>
@@ -73,7 +73,7 @@ function FacultyLists() {
                         ))
                     ) : q === 'quality-records' ? (
                         faculties.length && faculties?.map((faculty) => (
-                            <Link to={`/${dep}/faculty-records-lists/${faculty._id}?q=${q}`} key={faculty._id} replace>
+                            <Link to={`/${dep}/faculty-records-lists/${faculty._id}?q=${q}`} key={faculty._id}>
                                 <Card className="flex flex-col gap-y-1 items-center w-fit p-5 cursor-pointer hover:border hover:border-main">
                                     <Folder size='60' />
                                     <p className="font-medium">{[faculty.firstName, faculty.middleName, faculty.lastName].filter(Boolean).join(' ')}</p>

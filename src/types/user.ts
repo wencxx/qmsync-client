@@ -1,6 +1,6 @@
 import { Departments } from "./departments";
 
-export type UserRole = 'Faculty' | 'Admin' | 'Owner' | 'Controller' | 'Head';
+export type UserRole = 'Faculty' | 'Owner' | 'Controller' | 'Head';
 
 export interface UserData {
     _id?: string

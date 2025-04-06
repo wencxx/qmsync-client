@@ -32,19 +32,19 @@ export const columns = (getForms: () => Promise<void>): ColumnDef<ControlForm2>[
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Form ID
+          Record ID
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
     cell: ({ row }) => <div>{row.getValue("formId")}</div>,
   },
-  {
+  { 
     accessorKey: "formName",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Form Name
+          Record Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
@@ -98,15 +98,15 @@ export const columns = (getForms: () => Promise<void>): ColumnDef<ControlForm2>[
 
       const confirmDelete = async () => {
         try {
-          const res = await axios.delete(`${import.meta.env.VITE_ENDPOINT}controlled-forms/delete/${formToDelete}`)
+          const res = await axios.delete(`${import.meta.env.VITE_ENDPOINT}quality-records/delete/${formToDelete}`)
 
           if(res.status === 200) {
             getForms()
-            toast.success('Deleted form successfully')
+            toast.success('Deleted record successfully')
           }
         } catch (error) {
           console.log(error)
-          toast.error('Failed to delete form')
+          toast.error('Failed to delete record')
         }
       }
 
@@ -121,19 +121,15 @@ export const columns = (getForms: () => Promise<void>): ColumnDef<ControlForm2>[
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(form.formId)}>Copy form ID</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(form.formId)}>Copy record ID</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Eye className="mr-2 h-4 w-4" />
-                View details
-              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => window.open(form.fileUrl, "_blank")}>
                 <FileText className="mr-2 h-4 w-4" />
-                Download form
+                Download record
               </DropdownMenuItem>
               <DropdownMenuItem className="text-destructive" onClick={() => deleteForm(form?._id)}>
                 <Trash className="mr-2 h-4 w-4" />
-                Delete form
+                Delete record
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -142,9 +138,9 @@ export const columns = (getForms: () => Promise<void>): ColumnDef<ControlForm2>[
           <AlertDialog open={openAlertDialog} onOpenChange={setOpenAlertDialog}>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure you want to delete this form?</AlertDialogTitle>
+                <AlertDialogTitle>Are you sure you want to delete this record?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. It will permanently delete the form and all data associated with it.
+                  This action cannot be undone. It will permanently delete the record and all data associated with it.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

@@ -35,7 +35,7 @@ export const registerSchema = z.object({
         .max(50, { message: "Position must not exceed 50 characters" }),
 
     role: z.string()
-        .min(4, { message: "Role must be at least 10 characters" })
+        .min(4, { message: "Role must be at least 4 characters" })
         .max(50, { message: "Role must not exceed 50 characters" }),
 
     department: z.string()

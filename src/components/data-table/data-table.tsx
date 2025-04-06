@@ -131,7 +131,7 @@ export function DataTable<TData, TValue>({ columns, data, isLoading }: DataTable
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
-                    No forms found.
+                    No data to show.
                   </TableCell>
                 </TableRow>
               )

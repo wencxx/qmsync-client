@@ -42,28 +42,7 @@ const publicRoutes = [
   }
 ]
 
-
-const privateRoutes = [
-  {
-    path: '/',
-    element: <HomePage />
-  },
-  {
-    path: '/pending-controlled-forms',
-    element: <PendingControlledForms />
-  },
-  {
-    path: '/completed-controlled-forms',
-    element: <CompletedControlledForms />
-  },
-  {
-    path: '/pending-quality-records',
-    element: <PendingQualityRecords />
-  },
-  {
-    path: '/completed-quality-records',
-    element: <CompletedQualityRecords />
-  },
+const adminRoutes = [
   {
     path: '/manage-controlled-forms',
     element: <ManageControlledForms />
@@ -91,6 +70,34 @@ const privateRoutes = [
 ]
 
 
+const documentRoutes = [
+  {
+    path: '/pending-controlled-forms',
+    element: <PendingControlledForms />
+  },
+  {
+    path: '/completed-controlled-forms',
+    element: <CompletedControlledForms />
+  },
+  {
+    path: '/pending-quality-records',
+    element: <PendingQualityRecords />
+  },
+  {
+    path: '/completed-quality-records',
+    element: <CompletedQualityRecords />
+  },
+]
+
+
+const allowedToAll = [
+  {
+    path: '/',
+    element: <HomePage />
+  },
+]
+
+
 function App() {
   const setUser = useAuthStore((state) => state.setUser)
   const token = localStorage.getItem('token')
@@ -105,6 +112,9 @@ function App() {
         })
 
         setUser(response.data)
+        if(response.data.role){
+          localStorage.setItem('role', response.data.role)
+        }
       } catch (error) {
         console.log(error)
       }
@@ -124,10 +134,28 @@ function App() {
         ))}
         <Route path="/unauthorized" element={<Unauthorized />} />
 
-        {/* Protected Routes */}
-        <Route element={<ProtectedRoute allowedRoles={["Admin", "Owner"]} />}>
+        {/* Protected Routes - For all users */}
+        <Route element={<ProtectedRoute allowedRoles={['Faculty', 'Controller', 'Head', 'Custodians', 'Dean']} />}>
           <Route element={<Layout />}>
-            {privateRoutes.map((route, index) => (
+            {allowedToAll.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
+            ))}
+          </Route>
+        </Route>
+
+        {/* Protected Routes - For all except Controller */}
+        <Route element={<ProtectedRoute allowedRoles={['Faculty', 'Controller', 'Head', 'Custodians']} />}>
+          <Route element={<Layout />}>
+            {documentRoutes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
+            ))}
+          </Route>
+        </Route>
+
+        {/* Protected Routes - Controller Only */}
+        <Route element={<ProtectedRoute allowedRoles={['Controller']} />}>
+          <Route element={<Layout />}>
+            {adminRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
             ))}
           </Route>
