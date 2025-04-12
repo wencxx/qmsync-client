@@ -12,8 +12,6 @@ import {
 import { ArrowUpDown, MoreHorizontal, FileText } from "lucide-react"
 import type { FacultyFormsLists } from "@/types/control-form"
 import { formatDate } from "@/lib/utils"
-import axios from "axios"
-import { toast } from "sonner"
 import { useParams } from "react-router-dom"
 
 export const columns: ColumnDef<FacultyFormsLists>[] = [

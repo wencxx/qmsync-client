@@ -1,5 +1,4 @@
 import type { ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -9,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ArrowUpDown, MoreHorizontal, FileText, Trash, Eye } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, FileText, Trash } from "lucide-react"
 import type { ControlForm2 } from "@/types/control-form"
 import { formatDate } from "@/lib/utils"
 import {
