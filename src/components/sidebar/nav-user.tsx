@@ -153,7 +153,7 @@ export function NavUser({
             </SheetDescription>
           </SheetHeader>
           <div className="p-5">
-            {role === 'Head' ? <HeadForm /> : ( role === 'Faculty' ? <FacultyForm /> : (role === 'Custodian' ? <CustodCustodianFormin /> : '')) }
+            {role === 'Head' ? <HeadForm /> : ( role === 'Faculty' ? <FacultyForm /> : (role === 'Custodians' ? <CustodCustodianFormin /> : '')) }
           </div>
         </SheetContent>
       </Sheet>

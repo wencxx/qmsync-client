@@ -4,8 +4,8 @@ import ProtectedRoute from "./routes/protected-routes";
 import Layout from "./layout/layout";
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
-import Unauthorized from './pages/unauthorized'
 import HomePage from "./pages/home";
+import Unauthorized from "./pages/Unauthorized";
 // documents
 import PendingControlledForms from "./pages/documents/pending-control-form";
 import CompletedControlledForms from "./pages/documents/completed-control-form";
