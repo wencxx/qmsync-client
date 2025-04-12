@@ -50,7 +50,10 @@ const adminRoutes = [
   {
     path: '/manage-quality-records',
     element: <ManageQualityRecords />
-  },
+  }
+]
+
+const adminAndHead = [
   {
     path: '/:dep',
     element: <Departments />
@@ -105,14 +108,14 @@ function App() {
   useEffect(() => {
     const getCurrentUser = async () => {
       try {
-        const response = await axios.get<UserData>('http://localhost:3000/auth/get-current-user', {
+        const response = await axios.get<UserData>(`${import.meta.env.VITE_ENDPOINT}auth/get-current-user`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
 
         setUser(response.data)
-        if(response.data.role){
+        if (response.data.role) {
           localStorage.setItem('role', response.data.role)
         }
       } catch (error) {
@@ -143,8 +146,8 @@ function App() {
           </Route>
         </Route>
 
-        {/* Protected Routes - For all except Controller */}
-        <Route element={<ProtectedRoute allowedRoles={['Faculty', 'Controller', 'Head', 'Custodians']} />}>
+        {/* Protected Routes - For all except Controller and Dean */}
+        <Route element={<ProtectedRoute allowedRoles={['Faculty', 'Head', 'Custodians']} />}>
           <Route element={<Layout />}>
             {documentRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
@@ -156,6 +159,15 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['Controller']} />}>
           <Route element={<Layout />}>
             {adminRoutes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
+            ))}
+          </Route>
+        </Route>
+
+        {/* Protected Routes - Dean and Head Only */}
+        <Route element={<ProtectedRoute allowedRoles={['Dean', 'Head']} />}>
+          <Route element={<Layout />}>
+            {adminAndHead.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
             ))}
           </Route>

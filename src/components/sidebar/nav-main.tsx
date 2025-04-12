@@ -13,14 +13,17 @@ import {
 
 export function NavSingle({
   main,
-  title
+  title,
+  role,
 }: {
   main: {
     name: string
     url: string
-    icon: LucideIcon
+    icon: LucideIcon,
+    requiredRole?: string,
   }[],
-  title: string
+  title: string,
+  role?: string,
 }) {
 
   return (
@@ -28,16 +31,18 @@ export function NavSingle({
       <SidebarGroupLabel className="capitalize">{title}</SidebarGroupLabel>
       <SidebarMenu>
         {main.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <NavLink to={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </NavLink>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          item.requiredRole && item.requiredRole !== role ? null : (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton asChild>
+                <NavLink to={item.url}>
+                  <item.icon />
+                  <span>{item.name}</span>
+                </NavLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )
         ))}
       </SidebarMenu>
-    </SidebarGroup>
+    </SidebarGroup >
   )
 }

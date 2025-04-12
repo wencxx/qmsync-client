@@ -4,12 +4,13 @@ import {
   FileText,
   PencilRuler,
   FlaskConical,
-  Factory ,
+  Factory,
   Map,
   Plug,
   Cpu,
   Wrench,
-  Megaphone 
+  Megaphone,
+  Archive
 } from "lucide-react"
 import { NavDocs } from "@/components/sidebar/nav-documents"
 import { NavSingle } from "@/components/sidebar/nav-main"
@@ -24,15 +25,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// This is sample data.
 const data = {
-  main: [
-    {
-      name: "Dashboard",
-      url: "/",
-      icon: Megaphone,
-    },
-  ],
   documents: [
     {
       title: "Controlled Forms",
@@ -86,7 +79,7 @@ const data = {
     {
       name: "Department of Industrial Engineering",
       url: "/department-of-industrial-engineering",
-      icon: Factory ,
+      icon: Factory,
     },
     {
       name: "Department of Chemical and Mining Engineering",
@@ -120,20 +113,31 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const userData = useAuthStore((state) => state.user)
   const role = userData?.role
+
+  const main = [
+    {
+      name: "Dashboard",
+      url: "/",
+      icon: Megaphone,
+    },
+    {
+      name: "Department Storage",
+      url: `/${userData?.department?.department.split(' ').join('-').toLowerCase()}`,
+      icon: Archive,
+      requiredRole: 'Head'
+    },
+  ]
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher department={userData?.department} />
       </SidebarHeader>
       <SidebarContent>
-        <NavSingle main={data.main} title="main" />
-        {role == 'Controller' && <NavDocs items={data.documents} title="documents" />}
-        {role == 'Controller' && (
-          <>
-            <NavSingle main={data.courses} title="storage" />
-            <NavSingle main={data.manageDocuments} title="manage documents" />
-          </>
-        )}
+        <NavSingle main={main} title="main" role={role} />
+        {role && ['Head', 'Faculty', 'Custodians'].includes(role) && <NavDocs items={data.documents} title="documents" />}
+        {role && ['Dean'].includes(role) && <NavSingle main={data.courses} title="storage" />}
+        {role && ['Controller'].includes(role) && <NavSingle main={data.manageDocuments} title="manage documents" />}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={userData} />

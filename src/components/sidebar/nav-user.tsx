@@ -7,7 +7,6 @@ import {
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -44,27 +43,10 @@ import {
 import { useState } from "react"
 import { useAuthStore } from "@/store/authStore"
 import { useNavigate } from "react-router-dom"
-import { toast } from "sonner"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { UserData } from "@/types/user"
-
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-})
+import HeadForm from '@/forms/common-details/head-form'
+import FacultyForm from '@/forms/common-details/faculty-form'
+import CustodCustodianFormin from '@/forms/common-details/custodian-form'
 
 
 export function NavUser({
@@ -79,22 +61,12 @@ export function NavUser({
   const [openSheet, setOpenSheet] = useState<boolean>(false)
 
   const store = useAuthStore()
+  const role = useAuthStore((state) => state.role)
 
   const logout = async () => {
     store.logout()
     navigate('/login')
     window.location.href = "/login";
-  }
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-    },
-  })
-
-  const updateDetails = (values: z.infer<typeof formSchema>) => {
-    console.log(values)
   }
 
   const userInitials = user?.firstName?.slice(0, 1) + '' + user?.lastName?.slice(0, 1)
@@ -181,24 +153,7 @@ export function NavUser({
             </SheetDescription>
           </SheetHeader>
           <div className="p-5">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(updateDetails)} className="space-y-8">
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>First Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit">Submit</Button>
-              </form>
-            </Form>
+            {role === 'Head' ? <HeadForm /> : ( role === 'Faculty' ? <FacultyForm /> : (role === 'Custodian' ? <CustodCustodianFormin /> : '')) }
           </div>
         </SheetContent>
       </Sheet>

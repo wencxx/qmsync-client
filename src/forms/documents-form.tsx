@@ -12,12 +12,35 @@ import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuthStore } from "@/store/authStore";
 
 function DocumentsForm({ formFields, formId, setOpenDialog, getPendingForms, endpoint }: { formFields: string[], formId: string, setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>, getPendingForms: () => void, endpoint: string }) {
 
     const user = useAuthStore((state) => state.user)
+
+    const getDetails = async () => {
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_ENDPOINT}common-details/get/${user?._id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                validateStatus: status => status < 500
+            })
+
+            if (res.status === 200) {
+                form.reset(res.data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        if (user?._id) {
+            getDetails()
+        }
+    }, [user?._id])
 
     const form = useForm<{ [key: string]: string }>({
         defaultValues: formFields.reduce((acc, field) => ({ ...acc, [field]: "" }), {}),
@@ -27,7 +50,7 @@ function DocumentsForm({ formFields, formId, setOpenDialog, getPendingForms, end
 
     const onSubmit = async (values: any, e: any) => {
         e.preventDefault()
-        
+
         try {
             setIsLoading(true)
             const data = {
@@ -37,12 +60,12 @@ function DocumentsForm({ formFields, formId, setOpenDialog, getPendingForms, end
             }
 
             const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}${endpoint}/submit`, data)
-            
-            if(res.data === 'success'){
+
+            if (res.data === 'success') {
                 getPendingForms()
                 setOpenDialog(false)
                 toast.success('Submitted controlled form successfully.')
-            }else{
+            } else {
                 toast.error('Failed to submit controlled form.')
             }
         } catch (error) {
@@ -62,7 +85,7 @@ function DocumentsForm({ formFields, formId, setOpenDialog, getPendingForms, end
                             control={form.control}
                             name={field}
                             key={field}
-                            render={({field: formField}) => (
+                            render={({ field: formField }) => (
                                 <FormItem>
                                     <FormLabel className="capitalize">{field}</FormLabel>
                                     <FormControl>
