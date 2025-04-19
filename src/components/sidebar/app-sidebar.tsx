@@ -135,7 +135,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavSingle main={main} title="main" role={role} />
-        {role && ['Head', 'Faculty', 'Custodians'].includes(role) && <NavDocs items={data.documents} title="documents" />}
+        {role && ['Head', 'Faculty', 'Controller'].includes(role) && <NavDocs items={data.documents} title="documents" />}
         {role && ['Dean'].includes(role) && <NavSingle main={data.courses} title="storage" />}
         {role && ['Controller'].includes(role) && <NavSingle main={data.manageDocuments} title="manage documents" />}
       </SidebarContent>
