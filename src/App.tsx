@@ -147,7 +147,7 @@ function App() {
         </Route>
 
         {/* Protected Routes - For all except Controller and Dean */}
-        <Route element={<ProtectedRoute allowedRoles={['Faculty', 'Head', 'Controller']} />}>
+        <Route element={<ProtectedRoute allowedRoles={['Faculty', 'Head', 'Custodians']} />}>
           <Route element={<Layout />}>
             {documentRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
