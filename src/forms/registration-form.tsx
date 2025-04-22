@@ -32,6 +32,7 @@ import axios from "axios"
 import { toast } from "sonner"
 import { useEffect, useState } from "react"
 import { Departments } from "@/types/departments"
+import { Eye, EyeOff } from 'lucide-react'
 
 export function RegisterForm({
     className,
@@ -77,6 +78,17 @@ export function RegisterForm({
         }
     })
 
+    const emailValue = form.watch("email");
+
+    useEffect(() => {
+        if (emailValue) {
+            const username = emailValue.split("@")[0];
+            form.setValue("username", username);
+        }else{
+            form.setValue("username", '');
+        }
+    }, [emailValue, form]);
+
     const [loading, setLoading] = useState<boolean>(false)
 
     const register = async (values: z.infer<typeof registerSchema>) => {
@@ -113,6 +125,8 @@ export function RegisterForm({
         }
     }
 
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -250,7 +264,7 @@ export function RegisterForm({
                                     <FormItem>
                                         <FormLabel>Username<span className="text-main">*</span></FormLabel>
                                         <FormControl>
-                                            <Input type="text" {...field} />
+                                            <Input type="text" {...field} readOnly />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -303,7 +317,24 @@ export function RegisterForm({
                                         <FormItem>
                                             <FormLabel>Password<span className="text-main">*</span></FormLabel>
                                             <FormControl>
-                                                <Input type="password" {...field} />
+                                                <div className="relative">
+                                                    <Input type={showPassword ? "text" : "password"} className={cn("pr-10", className)} {...props} {...field} required />
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                                        onClick={() => setShowPassword(!showPassword)}
+                                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                                    >
+                                                        {showPassword ? (
+                                                            <EyeOff className="h-4 w-4 text-muted-foreground" />
+                                                        ) : (
+                                                            <Eye className="h-4 w-4 text-muted-foreground" />
+                                                        )}
+                                                        <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
+                                                    </Button>
+                                                </div>
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -316,7 +347,24 @@ export function RegisterForm({
                                         <FormItem>
                                             <FormLabel>Confirm Password<span className="text-main">*</span></FormLabel>
                                             <FormControl>
-                                                <Input type="password" {...field} />
+                                                <div className="relative">
+                                                    <Input type={showConfirmPassword ? "text" : "password"} className={cn("pr-10", className)} {...props} {...field} required />
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                        aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                                    >
+                                                        {showConfirmPassword ? (
+                                                            <EyeOff className="h-4 w-4 text-muted-foreground" />
+                                                        ) : (
+                                                            <Eye className="h-4 w-4 text-muted-foreground" />
+                                                        )}
+                                                        <span className="sr-only">{showConfirmPassword ? "Hide password" : "Show password"}</span>
+                                                    </Button>
+                                                </div>
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

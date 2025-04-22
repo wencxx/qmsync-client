@@ -2,6 +2,7 @@ import {
   ChevronsUpDown,
   LogOut,
   FileUser,
+  User,
 } from "lucide-react"
 
 import {
@@ -71,6 +72,10 @@ export function NavUser({
 
   const userInitials = user?.firstName?.slice(0, 1) + '' + user?.lastName?.slice(0, 1)
 
+  const navigateToProfile = () => {
+    navigate('/profile')
+  }
+
   return (
     <>
       <SidebarMenu>
@@ -110,6 +115,13 @@ export function NavUser({
                   </div>
                 </div>
               </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => navigateToProfile()}>
+                  <User/>
+                  Profile
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => setOpenSheet(true)}>
@@ -153,7 +165,7 @@ export function NavUser({
             </SheetDescription>
           </SheetHeader>
           <div className="p-5">
-            {role === 'Head' ? <HeadForm /> : ( role === 'Faculty' ? <FacultyForm /> : (role === 'Custodians' ? <CustodCustodianFormin /> : '')) }
+            {role === 'Head' ? <HeadForm /> : (role === 'Faculty' ? <FacultyForm /> : (role === 'Custodians' ? <CustodCustodianFormin /> : ''))}
           </div>
         </SheetContent>
       </Sheet>

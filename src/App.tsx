@@ -5,6 +5,7 @@ import Layout from "./layout/layout";
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
 import HomePage from "./pages/home";
+import ProfilePage from './pages/profile'
 import Unauthorized from "./pages/Unauthorized";
 // documents
 import PendingControlledForms from "./pages/documents/pending-control-form";
@@ -97,6 +98,10 @@ const allowedToAll = [
   {
     path: '/',
     element: <HomePage />
+  },
+  {
+    path: '/profile',
+    element: <ProfilePage />
   },
 ]
 

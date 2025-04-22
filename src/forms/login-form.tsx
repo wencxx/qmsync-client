@@ -15,6 +15,7 @@ import { useState } from "react"
 import axios from "axios"
 import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
+import { Eye, EyeOff } from "lucide-react"
 
 interface credentials {
     username: string
@@ -47,22 +48,22 @@ export function LoginForm({
             setLoading(true)
             const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}auth/login`, credentials)
 
-            if(res.data?.message === 'Login'){
+            if (res.data?.message === 'Login') {
                 const userData = res.data?.userData
 
                 localStorage.setItem('role', userData.role);
                 localStorage.setItem('token', userData.token);
 
                 store.login(userData)
-                
+
                 navigate('/')
-            }else if(res.data === 'Invalid credentials'){
+            } else if (res.data === 'Invalid credentials') {
                 toast.error('Invalid Credentials', {
                     description: 'Make sure to enter correct credentials',
                     position: 'top-center',
                     descriptionClassName: '!text-neutral-500'
                 })
-            }else if(res.data === 'Password do not match'){
+            } else if (res.data === 'Password do not match') {
                 toast.error('Password do not match', {
                     position: 'top-center',
                     descriptionClassName: '!text-neutral-500'
@@ -74,6 +75,8 @@ export function LoginForm({
             setLoading(false)
         }
     }
+
+    const [showPassword, setShowPassword] = useState(false)
 
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -101,7 +104,24 @@ export function LoginForm({
                                 <div className="flex items-center">
                                     <Label htmlFor="password">Password</Label>
                                 </div>
-                                <Input id="password" type="password" name="password" onChange={() => handleChange(event)} required />
+                                <div className="relative">
+                                    <Input type={showPassword ? "text" : "password"} name="password" className={cn("pr-10", className)} onChange={() => handleChange(event)} required  />
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff className="h-4 w-4 text-muted-foreground" />
+                                        ) : (
+                                            <Eye className="h-4 w-4 text-muted-foreground" />
+                                        )}
+                                        <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
+                                    </Button>
+                                </div>
                             </div>
                             <Button type="submit" className={`w-full ${loading && 'animate-pulse'}`} disabled={loading}>
                                 {loading ? 'Logging in' : 'Login'}

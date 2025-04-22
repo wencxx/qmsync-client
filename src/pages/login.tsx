@@ -9,7 +9,7 @@ export default function LoginPage() {
           <div className="flex h-14 w-14 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <img src={logo} alt="website logo" />
           </div>
-          <p className="font-medium uppercase text-center">QMS and Synchrony/Synchronization</p>
+          <p className="font-medium uppercase text-center">QMSync</p>
         </div>
         <LoginForm />
       </div>
