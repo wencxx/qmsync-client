@@ -92,7 +92,7 @@ export function RegisterForm({
     const [loading, setLoading] = useState<boolean>(false)
 
     const allowedEmails: Record<string, string[]> = {
-        Faculty: ['2222865@slu.edu.ph', '2222657@slu.edu.ph'],
+        Faculty: ['2224702@slu.edu.ph', '2222657@slu.edu.ph'],
         Head: ['2211050@slu.edu.ph', '2222865@slu.edu.ph'],
         Controller: ['2221009@slu.edu.ph', '2220765@slu.edu.ph'],
         Custodians: ['2227442@slu.edu.ph', '2221581@slu.edu.ph'],
