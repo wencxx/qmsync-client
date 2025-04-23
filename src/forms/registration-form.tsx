@@ -84,15 +84,32 @@ export function RegisterForm({
         if (emailValue) {
             const username = emailValue.split("@")[0];
             form.setValue("username", username);
-        }else{
+        } else {
             form.setValue("username", '');
         }
     }, [emailValue, form]);
 
     const [loading, setLoading] = useState<boolean>(false)
 
+    const allowedEmails: Record<string, string[]> = {
+        Faculty: ['2222865@slu.edu.ph', '2222657@slu.edu.ph'],
+        Head: ['2211050@slu.edu.ph', '2222865@slu.edu.ph'],
+        Controller: ['2221009@slu.edu.ph', '2220765@slu.edu.ph'],
+        Custodians: ['2227442@slu.edu.ph', '2221581@slu.edu.ph'],
+        Dean: ['221588@slu.edu.ph', '2223511@slu.edu.ph'],
+    }
+
     const register = async (values: z.infer<typeof registerSchema>) => {
-        const { confirmPass, ...data } = values
+        const { confirmPass, role, email, ...data } = values
+
+        // Validate email based on role
+        const validEmails = allowedEmails[role]
+        if (!validEmails || !validEmails.includes(email)) {
+            toast.error(`The email "${email}" is not allowed for the role "${role}".`, {
+                position: 'top-center'
+            })
+            return
+        }
 
         try {
             setLoading(true)
