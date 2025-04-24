@@ -102,6 +102,12 @@ export function RegisterForm({
     const register = async (values: z.infer<typeof registerSchema>) => {
         const { confirmPass, role, email, ...data } = values
 
+        const dataToRegister = {
+            role,
+            email,
+            ...data
+        }
+
         // Validate email based on role
         const validEmails = allowedEmails[role]
         if (!validEmails || !validEmails.includes(email)) {
@@ -113,7 +119,7 @@ export function RegisterForm({
 
         try {
             setLoading(true)
-            const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}auth/register`, data)
+            const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}auth/register`, dataToRegister)
 
             console.log(res.data)
             if (res.data === 'success') {
