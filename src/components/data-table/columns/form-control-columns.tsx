@@ -9,12 +9,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ArrowUpDown, MoreHorizontal, FileText } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, FileText, Pencil } from "lucide-react"
 import type { CompletedControlledForms } from "@/types/control-form"
 import { formatDate } from "@/lib/utils"
 import axios from "axios"
 import { toast } from "sonner"
 import ConvertApi from 'convertapi-js';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { useState } from "react"
+import EditDocumentsForm from '@/forms/edit-documents-form'
 
 export const columns: ColumnDef<CompletedControlledForms>[] = [
   {
@@ -190,33 +199,60 @@ export const columns: ColumnDef<CompletedControlledForms>[] = [
         }
       };
 
+      const [openEditForm, setOpenEditForm] = useState(false)
+      const [dataToEdit, setDataToEdit] = useState({})
+      const [placeholdersToEdit, setPlaceholders] = useState<string[]>([])
+
+      const editForm = (data: string[], placeholders: string[]) => {
+        setOpenEditForm(true)
+        setDataToEdit(data)
+        setPlaceholders(placeholders)
+      }
+
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(form.formId)}>Copy form ID</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => viewPDF()}>
-              <FileText className="mr-2 h-4 w-4" />
-              View
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => generatePDF()}>
-              <FileText className="mr-2 h-4 w-4" />
-              Export as PDF
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => generateDocx()}>
-              <FileText className="mr-2 h-4 w-4" />
-              Export as Docx
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(form.formId)}>Copy form ID</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => viewPDF()}>
+                <FileText className="mr-2 h-4 w-4" />
+                View
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => editForm(row.original.answers, row.original.placeholders)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => generatePDF()}>
+                <FileText className="mr-2 h-4 w-4" />
+                Export as PDF
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => generateDocx()}>
+                <FileText className="mr-2 h-4 w-4" />
+                Export as Docx
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Dialog open={openEditForm} onOpenChange={setOpenEditForm}>
+            <DialogContent className="!max-w-xl">
+              <DialogHeader>
+                <DialogTitle>Fill out form</DialogTitle>
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
+              <EditDocumentsForm formFields={placeholdersToEdit} setOpenDialog={setOpenEditForm} data={dataToEdit} endpoint="controlled-forms" />
+            </DialogContent>
+          </Dialog>
+        </>
       )
     },
   },

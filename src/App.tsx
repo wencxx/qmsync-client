@@ -6,6 +6,7 @@ import LoginPage from "./pages/login";
 import RegisterPage from "./pages/register";
 import HomePage from "./pages/home";
 import ProfilePage from './pages/profile'
+import ActivityLogs from './pages/activity-logs'
 import Unauthorized from "./pages/Unauthorized";
 // documents
 import PendingControlledForms from "./pages/documents/pending-control-form";
@@ -175,6 +176,13 @@ function App() {
             {adminAndHead.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
             ))}
+          </Route>
+        </Route>
+
+        {/* Protected Routes - Dean */}
+        <Route element={<ProtectedRoute allowedRoles={['Dean']} />}>
+          <Route element={<Layout />}>
+              <Route path="/activity-logs" element={<ActivityLogs />} />
           </Route>
         </Route>
       </Routes>

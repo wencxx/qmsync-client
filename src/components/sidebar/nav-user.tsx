@@ -48,6 +48,7 @@ import { UserData } from "@/types/user"
 import HeadForm from '@/forms/common-details/head-form'
 import FacultyForm from '@/forms/common-details/faculty-form'
 import CustodCustodianFormin from '@/forms/common-details/custodian-form'
+import axios from "axios"
 
 
 export function NavUser({
@@ -63,11 +64,25 @@ export function NavUser({
 
   const store = useAuthStore()
   const role = useAuthStore((state) => state.role)
+  const userData = useAuthStore((state) => state.user)
 
   const logout = async () => {
-    store.logout()
-    navigate('/login')
-    window.location.href = "/login";
+    
+    const res = await axios.post(`${import.meta.env.VITE_ENDPOINT}logs/add`, {
+      action: 'logout',
+      userId: userData?._id
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+    
+    if(res.status === 200){
+      store.logout()
+      navigate('/login')
+      window.location.href = "/login";
+    }
+
   }
 
   const userInitials = user?.firstName?.slice(0, 1) + '' + user?.lastName?.slice(0, 1)

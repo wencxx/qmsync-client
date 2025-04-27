@@ -29,6 +29,7 @@ export interface CompletedControlledForms {
   completedDate: Date
   submittedFormId: string
   placeholders: string[]
+  answers: string[]
   createdAt: Date
   _v: string
 }

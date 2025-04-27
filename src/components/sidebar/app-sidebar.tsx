@@ -10,7 +10,8 @@ import {
   Cpu,
   Wrench,
   Megaphone,
-  Archive
+  Archive,
+  ScrollText
 } from "lucide-react"
 import { NavDocs } from "@/components/sidebar/nav-documents"
 import { NavSingle } from "@/components/sidebar/nav-main"
@@ -128,6 +129,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
   ]
 
+  const others = [
+    {
+      name: "Activity Logs",
+      url: "/activity-logs",
+      icon: ScrollText,
+    },
+  ]
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -137,6 +146,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSingle main={main} title="main" role={role} />
         {role && ['Head', 'Faculty', 'Custodians'].includes(role) && <NavDocs items={data.documents} title="documents" />}
         {role && ['Dean'].includes(role) && <NavSingle main={data.courses} title="storage" />}
+        {role && ['Dean'].includes(role) && <NavSingle main={others} title="others" />}
         {role && ['Controller'].includes(role) && <NavSingle main={data.manageDocuments} title="manage documents" />}
       </SidebarContent>
       <SidebarFooter>
