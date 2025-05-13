@@ -238,7 +238,7 @@ function HomePage() {
                         <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
                         <p className="text-muted-foreground">Welcome back! Here's what's happening.</p>
                     </div>
-                    {store.hasRole('Controller') && (
+                    {(store.hasRole('Controller') || store.hasRole('Dean')) && (
                         <Button onClick={() => setOpenDialog(true)}>
                             <Plus />
                             Add news
@@ -268,7 +268,7 @@ function HomePage() {
                                             <CardDescription>{format(new Date(n.createdAt), "MMMM dd, yyyy")}</CardDescription>
                                         </CardHeader>
                                         <CardContent>
-                                            <p>
+                                            <p className="whitespace-pre-line">
                                                 {n.description}
                                             </p>
                                         </CardContent>

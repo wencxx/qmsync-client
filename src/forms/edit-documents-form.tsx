@@ -56,7 +56,7 @@ function EditDocumentsForm({ formFields, setOpenDialog, data, endpoint }: { form
     return (
         <>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="grid sm:grid-cols-2 gap-3">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[80dvh] overflow-auto">
                     {formFields.map((field, index) => (
                         <FormField
                             control={form.control}

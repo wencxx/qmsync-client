@@ -91,7 +91,7 @@ function FacultyLists() {
             return false
         }
 
-        const hasPending = forms.some(form => {
+        const hasPending = assignedForm.some(form => {
             const dateDue = new Date(form.dueDate)
             return !form.filledOut.includes(userId) && dateDue > dateNow
         }) 
@@ -101,6 +101,7 @@ function FacultyLists() {
         return false
     }
 
+    // check if user has late form
     const hasLateForm = (userId: any, role: any) => {
         const assignedForm = forms.filter(form => form.roles.includes(role)) 
         const dateNow = new Date()
@@ -109,7 +110,7 @@ function FacultyLists() {
             return false
         }
 
-        const hasLate = forms.some(form => {
+        const hasLate = assignedForm.some(form => {
             const dateDue = new Date(form.dueDate)
             return !form.filledOut.includes(userId) && dateDue < dateNow
         }) 
@@ -132,9 +133,9 @@ function FacultyLists() {
                     q === 'controlled-forms' ? (
                         faculties.length && faculties?.map((faculty) => (
                             <Link to={`/${dep}/faculty-form-lists/${faculty._id}?q=${q}`} key={faculty._id}>
-                                <Card className="flex flex-col gap-y-1 items-center w-fit p-5 cursor-pointer hover:border hover:border-main relative">
+                                <Card className="flex flex-col gap-y-1 items-center w-48 p-5 cursor-pointer hover:border hover:border-main relative">
                                     <Folder size='60' />
-                                    <p className="font-medium">{[faculty.firstName, faculty.middleName, faculty.lastName].filter(Boolean).join(' ')}</p>
+                                    <p className="font-medium">{[`${faculty.firstName?.split('')[0]}.`, faculty.lastName].filter(Boolean).join(' ')}</p>
                                     <p className="text-sm">{faculty.role}</p>
                                     <div className="absolute top-0 right-2 p-0 space-x-1">
                                         {hasLateForm(faculty._id, faculty.role) && <Badge className="!h-3 aspect-square p-0 rounded-full"></Badge>}
@@ -148,7 +149,7 @@ function FacultyLists() {
                             <Link to={`/${dep}/faculty-records-lists/${faculty._id}?q=${q}`} key={faculty._id}>
                                 <Card className="flex flex-col gap-y-1 items-center w-fit p-5 cursor-pointer hover:border hover:border-main">
                                     <Folder size='60' />
-                                    <p className="font-medium">{[faculty.firstName, faculty.middleName, faculty.lastName].filter(Boolean).join(' ')}</p>
+                                    <p className="font-medium">{[faculty.firstName?.split('')[0], faculty.lastName].filter(Boolean).join(' ')}</p>
                                     <p className="text-sm">{faculty.role}</p>
                                     <div className="absolute top-0 right-2 p-0 space-x-1">
                                         {hasLateForm(faculty._id, faculty.role) && <Badge className="!h-3 aspect-square p-0 rounded-full"></Badge>}

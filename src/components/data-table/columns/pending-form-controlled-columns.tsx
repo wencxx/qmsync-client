@@ -100,7 +100,7 @@ export const columns = (getPendingForms: () => void): ColumnDef<ControlForm2>[] 
 
           {/* form dialog */}
           <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-            <DialogContent className="!max-w-xl">
+            <DialogContent className="md:!max-w-3xl">
               <DialogHeader>
                 <DialogTitle>Fill out form</DialogTitle>
                 <DialogDescription></DialogDescription>

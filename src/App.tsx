@@ -92,6 +92,10 @@ const documentRoutes = [
     path: '/completed-quality-records',
     element: <CompletedQualityRecords />
   },
+  {
+    path: '/manage-quality-records',
+    element: <ManageQualityRecords />
+  }
 ]
 
 

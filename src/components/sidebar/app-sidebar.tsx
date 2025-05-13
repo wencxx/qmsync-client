@@ -15,13 +15,13 @@ import {
 } from "lucide-react"
 import { NavDocs } from "@/components/sidebar/nav-documents"
 import { NavSingle } from "@/components/sidebar/nav-main"
-import { NavUser } from "@/components/sidebar/nav-user"
+// import { NavUser } from "@/components/sidebar/nav-user"
 import { TeamSwitcher } from "@/components/sidebar/team-switcher"
 import { useAuthStore } from "@/store/authStore"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
+  // SidebarFooter,
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
@@ -57,7 +57,7 @@ const data = {
           url: "/completed-quality-records",
         }
       ],
-    }
+    },
   ],
   manageDocuments: [
     {
@@ -71,10 +71,17 @@ const data = {
       icon: FileCheck,
     }
   ],
+  manageDocuments2: [
+    {
+      name: "Quality Records",
+      url: "/manage-quality-records",
+      icon: FileCheck,
+    }
+  ],
   courses: [
     {
       name: "Department of Architecture",
-      url: "/department-of-architectures",
+      url: "/department-of-architecture",
       icon: PencilRuler,
     },
     {
@@ -145,13 +152,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavSingle main={main} title="main" role={role} />
         {role && ['Head', 'Faculty', 'Custodians'].includes(role) && <NavDocs items={data.documents} title="documents" />}
+        {role && ['Head', 'Faculty', 'Custodians'].includes(role) && <NavSingle main={data.manageDocuments2} title="manage documents" />}
         {role && ['Dean'].includes(role) && <NavSingle main={data.courses} title="storage" />}
         {role && ['Dean'].includes(role) && <NavSingle main={others} title="others" />}
         {role && ['Controller'].includes(role) && <NavSingle main={data.manageDocuments} title="manage documents" />}
       </SidebarContent>
-      <SidebarFooter>
+      {/* <SidebarFooter>
         <NavUser user={userData} />
-      </SidebarFooter>
+      </SidebarFooter> */}
       <SidebarRail />
     </Sidebar>
   )

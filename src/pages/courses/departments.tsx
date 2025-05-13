@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 import { useParams } from "react-router-dom"
 
 const depId: any = {
-  'department-of-architectures': '67e6aa2ab5d09db7e19297c6',
+  'department-of-architecture': '67e6aa2ab5d09db7e19297c6',
   'department-of-industrial-engineering': '67e6aa7a8ef633b881f12401',
   'department-of-chemical-and-mining-engineering': '67e6aaa98ef633b881f12403',
   'department-of-civil-and-geodetic-engineering': '67e6aac98ef633b881f12405',

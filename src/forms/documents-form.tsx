@@ -79,7 +79,7 @@ function DocumentsForm({ formFields, formId, setOpenDialog, getPendingForms, end
     return (
         <>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="grid sm:grid-cols-2 gap-3">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[80dvh] overflow-auto">
                     {formFields.map((field) => (
                         <FormField
                             control={form.control}
